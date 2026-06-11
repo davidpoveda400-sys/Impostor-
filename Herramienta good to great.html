@@ -1,0 +1,2416 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Liderazgo de Nivel 5</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ── RESET ─────────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  background: #F9F4EF;
+  color: #1C1C1C;
+  min-height: 100vh;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── TOKENS ─────────────────────────────────────────────────────────────────── */
+:root {
+  /* Olive / forest — used sparingly, never as large backgrounds on light screens */
+  --ol:        #3D5426;   /* primary accent: buttons, borders, icons */
+  --ol-deep:   #2B3B1A;   /* hover / pressed states */
+  --ol-tint:   rgba(61,84,38,0.06);  /* very faint bg tint */
+  --ol-rule:   rgba(61,84,38,0.18);  /* subtle border / rule */
+
+  /* Warm neutrals — the dominant palette */
+  --paper:     #F9F4EF;   /* page background */
+  --paper-2:   #F1EAE1;   /* subtle off-white cards on paper */
+  --paper-3:   #E7DDD2;   /* pressed / deeper surfaces */
+  --white:     #FFFFFF;   /* card surfaces */
+
+  /* Ink */
+  --ink:       #1C1C1C;
+  --ink-2:     #4A4A4A;
+  --ink-3:     #7A7A7A;
+  --ink-4:     #ABABAB;
+
+  /* Hairline borders */
+  --line:      rgba(0,0,0,0.09);
+  --line-md:   rgba(0,0,0,0.14);
+
+  /* Score badges */
+  --s1-bg: #FBE9E9; --s1: #963030;
+  --s2-bg: #FBF2DE; --s2: #8A5010;
+  --s3-bg: #E8F0E0; --s3: #3A5E20;
+  --s4-bg: #DDE8D4; --s4: #27431A;
+
+  /* Dark surfaces (cover, results hero, card-dark, transition) */
+  --dark-bg:   #232E1A;
+  --dark-bg-2: #1A2213;
+  --dark-text: #EDE8E1;
+  --dark-sub:  rgba(237,232,225,0.52);
+  --dark-line: rgba(237,232,225,0.1);
+  --dark-accent: rgba(237,232,225,0.75); /* sage-like on dark */
+
+  /* Shadow */
+  --sh: 0 1px 3px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.04);
+}
+
+/* ── VISIBILITY ─────────────────────────────────────────────────────────────── */
+#quiz, #results, #screen-transition, #screen-tool2 { display: none; }
+#cover { display: none; }
+#screen-home { display: flex; }
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   PORTADA
+═══════════════════════════════════════════════════════════════════════════════ */
+#cover {
+  min-height: 100vh;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 5rem 2rem;
+  background: var(--dark-bg);
+  position: relative;
+  overflow: hidden;
+}
+#cover::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 90% 55% at 70% -5%, rgba(80,110,50,0.38) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 45% at 0% 105%, rgba(42,58,28,0.5) 0%, transparent 55%);
+  pointer-events: none;
+}
+.cover-inner {
+  max-width: 540px; text-align: center;
+  position: relative; z-index: 1;
+  animation: fadeUp 0.9s ease both;
+}
+.cover-eyebrow {
+  font-size: 9px; font-weight: 600;
+  letter-spacing: 0.25em; text-transform: uppercase;
+  color: var(--dark-accent); opacity: 0.55;
+  margin-bottom: 2.25rem; display: block;
+}
+.cover-title {
+  font-family: 'Lora', Georgia, serif;
+  font-size: clamp(42px, 7vw, 68px);
+  font-weight: 400; line-height: 1.08;
+  color: var(--dark-text);
+  margin-bottom: 2.5rem;
+  letter-spacing: -0.03em;
+}
+.cover-title em { font-style: italic; color: var(--dark-accent); opacity: 0.8; }
+.cover-notice {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--dark-line);
+  padding: 1.5rem 1.75rem;
+  margin: 0 auto 2.5rem;
+  text-align: left;
+}
+.cover-notice-title {
+  font-size: 9px; font-weight: 600;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--dark-accent); opacity: 0.5; margin-bottom: 0.75rem;
+}
+.cover-notice-text {
+  font-size: 13.5px; font-weight: 300;
+  color: var(--dark-sub); line-height: 1.8;
+}
+.cover-notice-text strong { font-weight: 500; color: rgba(237,232,225,0.82); }
+.cover-meta {
+  display: flex; align-items: center; justify-content: center;
+  gap: 2rem; margin-bottom: 2.5rem; flex-wrap: wrap;
+}
+.cover-meta-item {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 11.5px; color: rgba(237,232,225,0.25);
+}
+.cover-meta-item svg { width: 12px; height: 12px; }
+.btn-start {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: var(--dark-text); color: var(--dark-bg);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13.5px; font-weight: 600; letter-spacing: 0.03em;
+  border: none; padding: 14px 36px; cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s;
+}
+.btn-start:hover { opacity: 0.9; transform: translateY(-1px); }
+.btn-start svg { width: 13px; height: 13px; }
+.cover-footer {
+  margin-top: 2.5rem; font-size: 9px;
+  color: rgba(237,232,225,0.15);
+  letter-spacing: 0.08em; text-transform: uppercase;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   QUIZ
+═══════════════════════════════════════════════════════════════════════════════ */
+#quiz { min-height: 100vh; background: var(--paper); }
+.quiz-shell { max-width: 660px; margin: 0 auto; padding: 2.5rem 1.5rem 6rem; }
+.top-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 2rem;
+}
+.top-wordmark {
+  font-family: 'Lora', serif; font-style: italic;
+  font-size: 14px; color: var(--ink-4);
+}
+.q-counter { font-size: 11px; color: var(--ink-4); letter-spacing: 0.05em; }
+.prog-track { height: 1px; background: var(--line); margin-bottom: 3.5rem; overflow: hidden; }
+.prog-fill { height: 1px; background: var(--ol); transition: width 0.5s cubic-bezier(0.4,0,0.2,1); }
+
+.char-banner {
+  display: flex; align-items: flex-start; gap: 10px;
+  border-left: 2px solid var(--ol);
+  padding: 9px 14px; margin-bottom: 1.75rem;
+  background: var(--ol-tint);
+}
+.char-banner svg { width: 13px; height: 13px; flex-shrink: 0; margin-top: 2px; }
+.char-banner-text {
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--ol);
+}
+.char-banner-sub { font-size: 12px; color: var(--ink-3); margin-top: 1px; }
+.q-context { font-size: 9px; color: var(--ink-4); margin-bottom: 0.5rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 600; }
+.q-text { font-family: 'Lora', serif; font-size: clamp(19px, 2.8vw, 23px); font-weight: 400; line-height: 1.45; color: var(--ink); margin-bottom: 0.65rem; }
+.q-subtext { font-size: 13px; color: var(--ink-3); line-height: 1.7; margin-bottom: 1.75rem; font-weight: 300; font-style: italic; }
+
+.open-q-card { background: var(--white); border: 1px solid var(--line-md); padding: 2rem 1.75rem; margin-bottom: 2rem; }
+.open-q-label { font-size: 9px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-4); margin-bottom: 0.75rem; }
+.open-q-text { font-family: 'Lora', serif; font-size: clamp(17px, 2.6vw, 21px); font-weight: 400; line-height: 1.5; color: var(--ink); margin-bottom: 1.25rem; }
+.open-q-textarea {
+  width: 100%; min-height: 110px;
+  border: 1px solid var(--line-md);
+  background: var(--paper); padding: 12px 14px;
+  font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--ink);
+  line-height: 1.65; resize: vertical; outline: none;
+  transition: border-color 0.18s;
+}
+.open-q-textarea:focus { border-color: var(--ol); background: var(--white); }
+.open-q-textarea::placeholder { color: var(--ink-4); }
+.open-q-note { font-size: 11px; color: var(--ink-4); margin-top: 0.6rem; font-style: italic; }
+
+.options { display: flex; flex-direction: column; gap: 7px; margin-bottom: 2rem; }
+.opt-btn {
+  display: flex; align-items: flex-start; gap: 14px;
+  background: var(--white); border: 1px solid var(--line-md);
+  padding: 14px 18px; cursor: pointer; text-align: left; width: 100%;
+  transition: border-color 0.16s, background 0.16s;
+}
+.opt-btn:hover { border-color: var(--ol-rule); background: var(--ol-tint); }
+.opt-btn.selected { border-color: var(--ol); background: var(--ol-tint); }
+.opt-marker {
+  width: 17px; height: 17px; border-radius: 50%;
+  border: 1.5px solid var(--line-md); flex-shrink: 0; margin-top: 3px;
+  position: relative; transition: all 0.16s;
+}
+.opt-btn.selected .opt-marker { background: var(--ol); border-color: var(--ol); }
+.opt-marker::after {
+  content: ''; position: absolute;
+  top: 50%; left: 50%; transform: translate(-50%,-50%);
+  width: 6px; height: 6px; background: #fff;
+  border-radius: 50%; opacity: 0; transition: opacity 0.16s;
+}
+.opt-btn.selected .opt-marker::after { opacity: 1; }
+.opt-text { font-size: 14px; color: var(--ink); line-height: 1.55; font-weight: 300; }
+
+.nav-row { display: flex; justify-content: space-between; align-items: center; }
+.btn-nav {
+  font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
+  letter-spacing: 0.02em; border: 1px solid var(--line-md);
+  padding: 10px 28px; background: transparent; color: var(--ink);
+  cursor: pointer; transition: all 0.14s;
+}
+.btn-nav:hover { background: var(--paper-2); }
+.btn-nav:disabled { opacity: 0.22; cursor: default; }
+.btn-nav.primary { background: var(--ol); color: var(--paper); border-color: var(--ol); }
+.btn-nav.primary:hover { background: var(--ol-deep); border-color: var(--ol-deep); }
+.btn-nav.primary:disabled { background: var(--paper-3); border-color: transparent; color: var(--ink-4); }
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   RESULTS
+═══════════════════════════════════════════════════════════════════════════════ */
+#results { background: var(--paper); padding-bottom: 5rem; }
+.r-hero {
+  background: var(--dark-bg); padding: 4rem 2rem 3.5rem;
+  text-align: center; position: relative; overflow: hidden;
+}
+.r-hero::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 70% at 50% -10%, rgba(90,120,55,0.28) 0%, transparent 60%);
+  pointer-events: none;
+}
+.r-hero-orb { display: none; }
+.r-eyebrow { font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--dark-accent); margin-bottom: 1.75rem; font-weight: 600; opacity: 0.5; position: relative; }
+.r-ring-wrap { display: flex; align-items: center; justify-content: center; margin-bottom: 1.75rem; position: relative; }
+.r-ring { position: relative; width: 120px; height: 120px; }
+.r-ring svg { transform: rotate(-90deg); }
+.r-ring-inner { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); text-align: center; }
+.r-ring-inner .rn { font-size: 30px; font-weight: 300; color: var(--dark-text); line-height: 1; }
+.r-ring-inner .rd { font-size: 10px; color: var(--dark-sub); margin-top: 3px; letter-spacing: 0.05em; }
+.r-label { font-family: 'Lora', serif; font-size: 22px; font-weight: 400; color: var(--dark-text); margin-bottom: 1rem; line-height: 1.35; position: relative; }
+.r-desc { font-size: 14px; font-weight: 300; color: var(--dark-sub); max-width: 500px; margin: 0 auto; line-height: 1.8; position: relative; }
+
+.r-body { max-width: 680px; margin: 0 auto; padding: 2.5rem 1.5rem 0; }
+.section-label { font-size: 9px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-4); margin: 2.5rem 0 1rem; }
+
+.char-block { background: var(--white); border: 1px solid var(--line-md); padding: 1.5rem; margin-bottom: 8px; }
+.char-block-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+.char-block-name { font-size: 13.5px; font-weight: 500; color: var(--ink); }
+.char-block-score { font-size: 20px; font-weight: 300; color: var(--ol); }
+.char-block-score.hp { color: var(--ink-2); }
+.char-block-bar-track { height: 1px; background: var(--paper-3); overflow: hidden; margin-bottom: 1rem; }
+.char-block-bar-fill { height: 1px; width: 0; transition: width 1s cubic-bezier(0.4,0,0.2,1); background: var(--ol); }
+.char-block-bar-fill.hp { background: var(--ink-3); }
+.char-dim-row { display: flex; align-items: center; justify-content: space-between; padding: 5px 0; border-top: 1px solid var(--line); }
+.char-dim-name { font-size: 12px; color: var(--ink-3); }
+.char-dim-score { font-size: 12px; font-weight: 500; color: var(--ol); }
+
+.refl-card { background: var(--white); border: 1px solid var(--line-md); padding: 1.5rem; margin-bottom: 8px; position: relative; overflow: hidden; }
+.refl-card::before { content: ''; position: absolute; top: 0; left: 0; width: 2px; height: 100%; background: var(--ol); }
+.refl-dim { font-size: 9px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink-4); margin-bottom: 0.6rem; }
+.refl-title { font-family: 'Lora', serif; font-size: 17px; font-weight: 400; color: var(--ink); margin-bottom: 0.6rem; line-height: 1.4; }
+.refl-body { font-size: 13px; color: var(--ink-3); line-height: 1.8; font-weight: 300; }
+.refl-body strong { font-weight: 500; color: var(--ink); }
+.refl-cta { margin-top: 0.75rem; font-size: 13.5px; font-style: italic; color: var(--ol); font-family: 'Lora', serif; line-height: 1.5; }
+
+.open-result-card { background: var(--white); border: 1px solid var(--line-md); padding: 1.5rem; margin-bottom: 8px; }
+.open-result-label { font-size: 9px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink-4); margin-bottom: 0.5rem; }
+.open-result-q { font-family: 'Lora', serif; font-size: 14px; color: var(--ink); margin-bottom: 0.75rem; font-style: italic; line-height: 1.5; }
+.open-result-a { font-size: 13px; color: var(--ink-3); line-height: 1.7; font-weight: 300; background: var(--paper); padding: 12px 14px; }
+.open-result-a.empty { color: var(--ink-4); font-style: italic; }
+
+.answer-item { background: var(--white); border: 1px solid var(--line); padding: 12px 16px; display: flex; align-items: flex-start; gap: 12px; margin-bottom: 5px; }
+.a-badge { min-width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; flex-shrink: 0; }
+.s1 { background: var(--s1-bg); color: var(--s1); }
+.s2 { background: var(--s2-bg); color: var(--s2); }
+.s3 { background: var(--s3-bg); color: var(--s3); }
+.s4 { background: var(--s4-bg); color: var(--s4); }
+.a-tag { font-size: 10px; color: var(--ink-4); margin-bottom: 2px; letter-spacing: 0.04em; }
+.a-text { font-size: 13px; color: var(--ink); line-height: 1.5; }
+
+.actions { display: flex; gap: 8px; margin-top: 2.5rem; flex-wrap: wrap; }
+.btn-action {
+  font-family: 'DM Sans', sans-serif; font-size: 12.5px; font-weight: 500;
+  letter-spacing: 0.03em; border: 1px solid var(--line-md);
+  padding: 10px 24px; background: transparent; color: var(--ink);
+  cursor: pointer; transition: background 0.14s;
+  display: inline-flex; align-items: center; gap: 7px;
+}
+.btn-action:hover { background: var(--paper-2); }
+.btn-action.primary { background: var(--ol); color: var(--paper); border-color: var(--ol); }
+.btn-action.primary:hover { background: var(--ol-deep); border-color: var(--ol-deep); }
+.btn-action svg { width: 13px; height: 13px; }
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   TRANSITION
+═══════════════════════════════════════════════════════════════════════════════ */
+#screen-transition {
+  min-height: 100vh; display: none;
+  flex-direction: column; align-items: center; justify-content: center;
+  background: var(--dark-bg-2); position: relative; overflow: hidden; padding: 3rem 2rem;
+}
+#screen-transition::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 65% 55% at 50% 45%, rgba(55,80,35,0.4) 0%, transparent 65%);
+  pointer-events: none;
+}
+.trans-particle { position: absolute; border-radius: 50%; animation: particleFloat linear infinite; opacity: 0; }
+@keyframes particleFloat {
+  0%   { transform: translateY(105vh); opacity: 0; }
+  8%   { opacity: 0.3; }
+  92%  { opacity: 0.05; }
+  100% { transform: translateY(-15vh) translateX(var(--drift,0px)); opacity: 0; }
+}
+.trans-inner { max-width: 460px; text-align: center; position: relative; z-index: 1; animation: fadeUp 1s ease 0.35s both; }
+.trans-overline { font-size: 9px; font-weight: 600; letter-spacing: 0.28em; text-transform: uppercase; color: var(--dark-text); opacity: 0.28; margin-bottom: 2rem; display: block; }
+.trans-title { font-family: 'Lora', serif; font-size: clamp(26px, 5vw, 42px); font-weight: 400; line-height: 1.22; letter-spacing: -0.01em; color: var(--dark-text); margin-bottom: 1.5rem; }
+.trans-title em { font-style: italic; color: var(--dark-accent); opacity: 0.75; }
+.trans-rule { width: 28px; height: 1px; background: rgba(237,232,225,0.2); margin: 0 auto 1.5rem; }
+.trans-body { font-size: 14px; font-weight: 300; color: var(--dark-sub); line-height: 1.9; margin-bottom: 3rem; }
+.trans-body em { font-style: italic; color: rgba(237,232,225,0.75); font-family: 'Lora', serif; font-size: 15.5px; }
+.btn-trans {
+  display: inline-flex; align-items: center; gap: 9px;
+  background: transparent; color: var(--dark-text); opacity: 0.75;
+  border: 1px solid rgba(237,232,225,0.2);
+  font-family: 'DM Sans', sans-serif; font-size: 12.5px; font-weight: 500; letter-spacing: 0.05em;
+  padding: 13px 38px; cursor: pointer; transition: all 0.22s;
+}
+.btn-trans:hover { opacity: 1; border-color: rgba(237,232,225,0.4); background: rgba(237,232,225,0.04); }
+.btn-trans svg { width: 12px; height: 12px; }
+.btn-trans-skip { display: block; margin-top: 1rem; font-size: 11px; color: rgba(237,232,225,0.2); background: none; border: none; cursor: pointer; font-family: 'DM Sans', sans-serif; letter-spacing: 0.04em; transition: color 0.18s; }
+.btn-trans-skip:hover { color: rgba(237,232,225,0.45); }
+.trans-footnote { position: absolute; bottom: 2.5rem; font-size: 9px; color: rgba(237,232,225,0.14); letter-spacing: 0.12em; text-transform: uppercase; animation: fadeUp 0.8s ease 2s both; }
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   TOOL 2 — SONIDO DEL EQUIPO
+═══════════════════════════════════════════════════════════════════════════════ */
+#screen-tool2 { background: var(--paper); min-height: 100vh; }
+
+/* Topbar */
+.t2-topbar {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(249,244,239,0.94);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+  padding: 14px 1.75rem;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.t2-wordmark { font-family: 'Lora', serif; font-style: italic; font-size: 13.5px; color: var(--ink-4); }
+.t2-badge {
+  font-size: 9px; font-weight: 600; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--ink-3);
+  border: 1px solid var(--line-md); padding: 4px 10px;
+}
+
+/* Layout */
+.t2-page { max-width: 1080px; margin: 0 auto; padding: 2.5rem 1.5rem 5rem; }
+.stack { display: flex; flex-direction: column; gap: 1.75rem; }
+.grid-2    { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.grid-auto { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px,1fr)); gap: 1rem; }
+@media (max-width: 640px) { .grid-2, .grid-auto { grid-template-columns: 1fr; } }
+
+/* Cards */
+.card { background: var(--white); border: 1px solid var(--line-md); padding: 1.75rem; box-shadow: var(--sh); }
+.card-dark { background: #344526; color: var(--dark-text); padding: 1.75rem; box-shadow: var(--sh); }
+
+/* Hero */
+.t2-section-label {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--paper-2); border: 1px solid var(--line-md);
+  color: var(--ink-3); padding: 4px 12px;
+  font-size: 9px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase;
+  margin-bottom: 1.25rem;
+}
+/* The original HTML uses class="section-label" renamed to class="t2-section-label" */
+.t2-section-label .icon { width: 12px; height: 12px; stroke: var(--ink-4); }
+.hero-title { font-family: 'Lora', Georgia, serif; font-size: clamp(2rem, 4.5vw, 3rem); font-weight: 400; letter-spacing: -0.02em; line-height: 1.12; max-width: 34rem; margin-bottom: 0.75rem; color: var(--ink); }
+.hero-sub { color: var(--ink-3); max-width: 50rem; font-size: 14px; line-height: 1.72; font-weight: 300; }
+
+/* Section heads */
+.section-head { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem; }
+.step-number { width: 1.6rem; height: 1.6rem; background: var(--ink); color: var(--paper); display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; flex-shrink: 0; }
+.section-title { font-size: 14.5px; font-weight: 600; color: var(--ink); letter-spacing: 0.01em; }
+
+/* Buttons */
+.btn {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  background: var(--ink); color: var(--paper);
+  border: 1px solid var(--ink); padding: 0.6rem 1.2rem;
+  font-size: 12.5px; font-weight: 500; letter-spacing: 0.02em;
+  cursor: pointer; font-family: inherit;
+  transition: background 0.14s, color 0.14s;
+  white-space: nowrap;
+}
+.btn:hover { background: var(--ink-2); border-color: var(--ink-2); }
+.btn:disabled { opacity: 0.35; cursor: not-allowed; }
+.btn-outline { background: transparent; color: var(--ink); border-color: var(--line-md); }
+.btn-outline:hover { border-color: var(--ink); background: transparent; color: var(--ink); }
+.btn-sm { padding: 0.38rem 0.85rem; font-size: 11.5px; }
+.btn-row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; }
+
+/* Inputs */
+.input, .select, .textarea {
+  width: 100%; border: 1px solid var(--line-md);
+  padding: 0.65rem 0.95rem; font-size: 13px; font-family: inherit;
+  background: var(--paper); color: var(--ink); outline: none;
+  transition: border-color 0.14s, background 0.14s;
+}
+.input:focus, .select:focus, .textarea:focus { border-color: var(--ink); background: var(--white); }
+.textarea { min-height: 70px; resize: vertical; }
+.input-name { width: 100%; font-size: 1rem; font-weight: 600; background: transparent; border: none; border-bottom: 1px solid var(--line-md); outline: none; padding-bottom: 0.3rem; color: var(--ink); font-family: inherit; }
+.input-name:focus { border-bottom-color: var(--ink); }
+label .label-text { font-size: 9px; color: var(--ink-4); font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; display: block; margin-bottom: 0.3rem; }
+
+/* Pills */
+.pill { display: inline-flex; align-items: center; border: 1px solid var(--line-md); background: var(--white); color: var(--ink-3); padding: 0.28rem 0.75rem; font-size: 11px; cursor: pointer; transition: all 0.13s; font-family: inherit; }
+.pill:hover { border-color: var(--ink-3); color: var(--ink); }
+.pill.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.pill-tag { display: inline-block; background: rgba(255,255,255,0.85); border: 1px solid var(--line); padding: 0.18rem 0.6rem; font-size: 11px; color: var(--ink); }
+
+/* Persona card */
+.persona-card { background: var(--white); border: 1px solid var(--line-md); padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem; box-shadow: var(--sh); }
+.persona-num { font-size: 9px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--ink-4); font-weight: 600; margin-bottom: 0.2rem; }
+.persona-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
+.remove-btn { background: none; border: none; cursor: pointer; color: var(--ink-4); padding: 0.25rem; line-height: 1; font-size: 1rem; transition: color 0.13s; }
+.remove-btn:hover { color: var(--s1); }
+
+/* Quadrant buttons */
+.q-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.45rem; }
+.q-btn { text-align: left; padding: 0.8rem; cursor: pointer; transition: all 0.13s; border: 1.5px solid transparent; font-family: inherit; }
+.q-btn-title { font-size: 10px; font-weight: 700; letter-spacing: 0.02em; }
+.q-btn-desc  { font-size: 10px; margin-top: 0.2rem; line-height: 1.4; opacity: 0.7; }
+
+/* Mapa cuadrantes */
+.quad-cell { padding: 1rem; border: 1px solid; min-height: 120px; }
+.quad-id { font-weight: 800; font-size: 0.9rem; }
+.quad-titulo { font-weight: 600; font-size: 10.5px; margin-top: 0.1rem; }
+.quad-desc { font-size: 10.5px; color: #555; margin-top: 0.3rem; line-height: 1.45; }
+.quad-decision { font-size: 10.5px; color: #3C3C3C; margin-top: 0.3rem; font-weight: 500; }
+.quad-count { background: rgba(255,255,255,0.85); padding: 0.18rem 0.6rem; font-size: 11.5px; font-weight: 700; white-space: nowrap; }
+.quad-chips { margin-top: 0.6rem; display: flex; flex-wrap: wrap; gap: 0.3rem; }
+
+/* Instrument card */
+.instr-card { background: var(--paper-2); border: 1px solid var(--paper-3); padding: 0.9rem 1rem; }
+.instr-title { font-size: 13px; font-weight: 600; }
+.instr-sub { font-size: 11.5px; color: var(--ink-3); margin-top: 0.2rem; line-height: 1.5; }
+
+/* Retro (inside card-dark) */
+.retro-heading { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 0.6rem; color: var(--dark-text); opacity: 0.45; }
+.retro-item { font-size: 13px; line-height: 1.65; color: var(--dark-sub); padding-left: 1rem; position: relative; margin-bottom: 0.45rem; }
+.retro-item::before { content: "—"; position: absolute; left: 0; color: rgba(237,232,225,0.3); }
+
+/* Progress */
+.progress-wrap { height: 1px; background: rgba(255,255,255,0.1); overflow: hidden; margin-top: 0.75rem; }
+.progress-bar { height: 100%; background: rgba(237,232,225,0.45); width: 0%; transition: width 0.5s linear; }
+
+/* WAV banner */
+.dl-banner { border: 1px solid var(--line-md); background: var(--paper-2); padding: 1rem; margin-top: 0.75rem; }
+
+/* Download section */
+.t2-download-section { background: var(--dark-bg); margin-top: 1.5rem; }
+.t2-download-inner { padding: 2rem 1.75rem; }
+.t2-download-label { font-family: 'Lora', serif; font-size: 1rem; font-weight: 400; color: var(--dark-text); margin-bottom: 0.35rem; }
+.t2-download-sub { font-size: 12px; color: var(--dark-sub); margin-bottom: 1.25rem; font-weight: 300; }
+.t2-download-actions { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+.btn-dl {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: transparent; color: var(--dark-text); opacity: 0.65;
+  border: 1px solid rgba(237,232,225,0.18);
+  font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 0.04em;
+  padding: 10px 20px; cursor: pointer; transition: all 0.2s; text-decoration: none;
+}
+.btn-dl:hover { opacity: 1; border-color: rgba(237,232,225,0.38); background: rgba(237,232,225,0.04); }
+.btn-dl svg { width: 12px; height: 12px; }
+.btn-dl-secondary { opacity: 0.45; }
+
+/* Icons */
+.icon { width: 1rem; height: 1rem; display: inline-block; vertical-align: middle; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.divider { height: 1px; background: var(--line); }
+.s2-section-label { display: none; } /* hidden — replaced by t2-section-label */
+.muted { color: var(--ink-3); }
+
+/* ── ANIMATIONS ──────────────────────────────────────────────────────────────── */
+@keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+.fade-up { animation: fadeUp 0.32s ease both; }
+
+/* ── PRINT ───────────────────────────────────────────────────────────────────── */
+@media print {
+  #cover, #quiz, #screen-transition, #screen-tool2 { display: none !important; }
+  #results { display: block !important; }
+  .actions { display: none; }
+  .r-hero { background: var(--dark-bg) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+
+
+
+
+/* Light background placements: invert to dark ink, multiply removes white      */
+.etd-light {
+  display: inline-block;
+  width: 52px;
+  height: auto;
+  opacity: 0.30;
+  filter: invert(1);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  user-select: none;
+  vertical-align: middle;
+}
+
+
+
+.char-block-desc {
+  font-size: 12.5px;
+  color: var(--ink-3);
+  line-height: 1.65;
+  font-weight: 300;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--line);
+}
+
+/* ── HOME SCREEN ─────────────────────────────────────────────────────────── */
+#screen-home {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  background: var(--dark-bg);
+  position: relative;
+  overflow: hidden;
+}
+#screen-home::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 80% 55% at 65% -5%, rgba(80,110,50,0.32) 0%, transparent 55%),
+    radial-gradient(ellipse 55% 45% at 0% 105%, rgba(42,58,28,0.45) 0%, transparent 55%);
+  pointer-events: none;
+}
+.home-inner {
+  max-width: 620px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+  animation: fadeUp 0.85s ease both;
+}
+.home-eyebrow {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--dark-text);
+  opacity: 0.4;
+  margin-bottom: 2rem;
+  display: block;
+}
+.home-title {
+  font-family: 'Lora', Georgia, serif;
+  font-size: clamp(32px, 5.5vw, 52px);
+  font-weight: 400;
+  color: var(--dark-text);
+  line-height: 1.12;
+  letter-spacing: -0.025em;
+  margin-bottom: 1rem;
+}
+.home-title em { font-style: italic; color: var(--dark-text); opacity: 0.65; }
+.home-sub {
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--dark-sub);
+  line-height: 1.75;
+  margin-bottom: 3rem;
+  max-width: 440px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.home-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+@media (max-width: 540px) {
+  .home-cards { grid-template-columns: 1fr; }
+}
+.home-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(237,232,225,0.1);
+  padding: 2rem 1.75rem;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.2s, border-color 0.2s, transform 0.18s;
+  position: relative;
+  overflow: hidden;
+}
+.home-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 2px; height: 100%;
+  background: var(--ol);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.home-card:hover {
+  background: rgba(255,255,255,0.07);
+  border-color: rgba(237,232,225,0.2);
+  transform: translateY(-2px);
+}
+.home-card:hover::before { opacity: 1; }
+.home-card-num {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--dark-text);
+  opacity: 0.3;
+  margin-bottom: 1.25rem;
+  display: block;
+}
+.home-card-icon {
+  width: 36px; height: 36px;
+  border: 1px solid rgba(237,232,225,0.12);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 1.25rem;
+}
+.home-card-icon svg {
+  width: 16px; height: 16px;
+  stroke: var(--dark-text);
+  opacity: 0.55;
+  fill: none;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.home-card-title {
+  font-family: 'Lora', serif;
+  font-size: 17px;
+  font-weight: 400;
+  color: var(--dark-text);
+  line-height: 1.3;
+  margin-bottom: 0.65rem;
+}
+.home-card-desc {
+  font-size: 12.5px;
+  font-weight: 300;
+  color: var(--dark-sub);
+  line-height: 1.65;
+  margin-bottom: 1.5rem;
+}
+.home-card-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--dark-text);
+  opacity: 0.4;
+  transition: opacity 0.18s;
+}
+.home-card:hover .home-card-cta { opacity: 0.8; }
+.home-card-cta svg {
+  width: 12px; height: 12px;
+  stroke: currentColor; fill: none;
+  stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+}
+.home-footer {
+  margin-top: 2.5rem;
+  font-size: 9px;
+  color: rgba(237,232,225,0.14);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+
+.btn-back-home {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  color: var(--dark-text);
+  opacity: 0.35;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  margin-bottom: 2rem;
+  transition: opacity 0.18s;
+  padding: 0;
+}
+.btn-back-home:hover { opacity: 0.7; }
+
+
+.t2-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  color: var(--ink-3);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.18s;
+}
+.t2-back-btn:hover { color: var(--ink); }
+
+
+/* ── BACK BUTTON — top-left on dark intro screens ──────────────────────────── */
+.cover-back-btn {
+  position: absolute;
+  top: 1.75rem;
+  left: 2rem;
+  z-index: 10;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  color: var(--dark-text);
+  opacity: 0.35;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 0;
+  transition: opacity 0.18s;
+}
+.cover-back-btn:hover { opacity: 0.75; }
+
+/* tool2-intro uses cover styles — ensure flex layout */
+#screen-tool2-intro {
+  min-height: 100vh;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  background: var(--dark-bg);
+  position: relative;
+  overflow: hidden;
+}
+#screen-tool2-intro::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 80% 55% at 65% -5%, rgba(80,110,50,0.32) 0%, transparent 55%),
+    radial-gradient(ellipse 55% 45% at 0% 105%, rgba(42,58,28,0.45) 0%, transparent 55%);
+  pointer-events: none;
+}
+
+
+.quiz-back-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: transparent; border: none;
+  color: var(--ink-4);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  cursor: pointer; padding: 0;
+  transition: color 0.18s;
+}
+.quiz-back-btn:hover { color: var(--ink); }
+
+</style>
+</head>
+<body>
+
+<!-- ========== HOME ========== -->
+<section id="screen-home">
+  <div class="home-inner">
+    <span class="home-eyebrow">Basado en Good to Great · Jim Collins</span>
+    <h1 class="home-title">Equipos de<br><em>Alto Rendimiento</em></h1>
+    <p class="home-sub">Dos herramientas para mirar tu liderazgo con honestidad y leer cómo está funcionando el equipo que lideras hoy.</p>
+
+    <div class="home-cards">
+
+      <div class="home-card" onclick="goToDiagnostico()">
+        <span class="home-card-num">Herramienta 01</span>
+        <div class="home-card-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        </div>
+        <div class="home-card-title">Liderazgo<br>Nivel 5</div>
+        <p class="home-card-desc">Mide qué tan presente están la voluntad profesional y la humildad personal en cómo lideras hoy.</p>
+        <span class="home-card-cta">
+          Comenzar
+          <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </div>
+
+      <div class="home-card" onclick="goToEquipo()">
+        <span class="home-card-num">Herramienta 02</span>
+        <div class="home-card-icon">
+          <svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+        </div>
+        <div class="home-card-title">¿Cómo está sonando<br>tu equipo?</div>
+        <p class="home-card-desc">Lee la arquitectura de tu equipo desde las personas, los roles y el lugar que ocupan en el bus.</p>
+        <span class="home-card-cta">
+          Comenzar
+          <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </div>
+
+    </div>
+    <p class="home-footer">Equipos de Alto Rendimiento · ETD</p>
+  </div>
+</section>
+
+<section id="cover">
+  <button class="cover-back-btn" onclick="backToHome()">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+    Volver
+  </button>
+  <div class="cover-inner">
+    
+        <div class="cover-eyebrow">Basado en Good to Great · Jim Collins</div>
+    <h1 class="cover-title">¿Liderazgo de<br><em>Nivel 5?</em></h1>
+
+    <div class="cover-notice">
+      <div class="cover-notice-title">Antes de comenzar</div>
+      <div class="cover-notice-text">
+        Esta herramienta es <strong>exclusivamente para ti</strong>. No hay respuestas correctas ni incorrectas, y nadie más verá tus resultados. Su único propósito es ayudarte a reflexionar con honestidad sobre cómo lideras hoy, para que puedas decidir con más conciencia cómo quieres liderar mañana.<br><br>
+        <strong>Responde desde lo que realmente haces, no desde lo que te gustaría hacer.</strong> Ahí está el valor de este ejercicio.
+      </div>
+    </div>
+    <button class="btn-start" onclick="startQuiz()">
+      Comenzar
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </button>
+  </div>
+</section>
+
+<section id="quiz">
+  <div class="quiz-shell">
+    <div class="top-bar">
+      <button class="quiz-back-btn" onclick="backFromQuiz()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        Volver
+      </button>
+      <div class="top-wordmark">¿Liderazgo de Nivel 5?</div>
+      <div class="q-counter" id="q-counter">1 / 12</div>
+    </div>
+    <div class="prog-track"><div class="prog-fill" id="prog-fill" style="width:8.33%"></div></div>
+    <div id="question-area"></div>
+    <div class="nav-row">
+      <button class="btn-nav" id="btn-back" onclick="goBack()" disabled>← Anterior</button>
+      <button class="btn-nav primary" id="btn-next" onclick="goNext()" disabled>Siguiente →</button>
+    </div>
+  </div>
+</section>
+
+<section id="results">
+  <div class="r-hero">
+    <div class="r-hero-orb"></div>
+    <div style="position:relative;z-index:1;">
+                  <div class="r-eyebrow">¿Liderazgo de Nivel 5?</div>
+      <div class="r-ring-wrap">
+        <div class="r-ring">
+          <svg width="120" height="120" viewBox="0 0 120 120">
+            <circle cx="60" cy="60" r="50" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="8"/>
+            <circle cx="60" cy="60" r="50" fill="none" stroke="url(#rgrad)" stroke-width="8"
+              stroke-linecap="round" stroke-dasharray="314" id="ring-dash" stroke-dashoffset="314"/>
+            <defs>
+              <linearGradient id="rgrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#3D5426"/><stop offset="100%" stop-color="#7A9C50"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <div class="r-ring-inner">
+            <div class="rn" id="r-score">0</div>
+            <div class="rd">/ 40</div>
+          </div>
+        </div>
+      </div>
+      <div class="r-label" id="r-label"></div>
+      <p class="r-desc" id="r-desc"></p>
+    </div>
+  </div>
+
+  <div class="r-body">
+    <div class="section-label">Las dos características del nivel 5</div>
+    <div id="char-blocks"></div>
+
+    <div class="section-label">Para seguir pensando</div>
+    <div id="reflections"></div>
+
+    <div class="section-label">Tus preguntas abiertas</div>
+    <div id="open-answers"></div>
+
+    <div class="section-label">Respuesta por dimensión</div>
+    <div id="answers-detail"></div>
+
+    <div class="actions">
+      <button class="btn-action primary" id="btn-go-tool2" onclick="goToTransition()" style="display:none">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+        Continuar: ¿Cómo suena tu equipo?
+      </button>
+      <button class="btn-action primary" onclick="window.print()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        Imprimir / Guardar PDF
+      </button>
+      <button class="btn-action" onclick="restart()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
+        Volver a empezar
+      </button>
+    </div>
+  </div>
+</section>
+
+<section id="screen-transition" style="display:none;">
+  <div id="trans-particles"></div>
+  <div class="trans-inner">
+            <p class="trans-overline">Capítulo II</p>
+    <h2 class="trans-title">De <em>cómo lideras</em><br>a cómo <em>suena</em><br>lo que construiste</h2>
+    <div class="trans-rule"></div>
+    <p class="trans-body">Has mirado hacia adentro. Has tomado nota.<br><br>
+    Ahora viene la segunda parte del mismo viaje:<br>
+    <em>escuchar al equipo que estás liderando hoy.</em><br><br>
+    Porque el liderazgo no vive solo en las intenciones.<br>Vive en las personas que lo rodean.</p>
+    <button class="btn-trans" onclick="goToTool2()">
+      Entrar a la segunda herramienta
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </button>
+    <button class="btn-trans-skip" onclick="goToTool2()">Continuar sin pausa →</button>
+  </div>
+  <p class="trans-footnote">Herramienta 2 de 2 · ¿Cómo está sonando tu equipo?</p>
+</section>
+
+<!-- ========== TOOL2 INTRO ========== -->
+<section id="screen-tool2-intro" style="display:none;">
+  <button class="cover-back-btn" onclick="backFromTool2Intro()">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+    Volver
+  </button>
+  <div class="cover-inner">
+    <div class="cover-eyebrow">Basado en Good to Great · Jim Collins</div>
+    <h1 class="cover-title">¿Cómo está<br><em>sonando</em> tu equipo?</h1>
+    <div class="cover-notice">
+      <div class="cover-notice-title">Antes de comenzar</div>
+      <div class="cover-notice-text">
+        Esta herramienta no evalúa personas, <strong>lee patrones</strong>. Te ayuda a ver cómo está funcionando el sistema que lideras: quién está en el lugar correcto, quién necesita un movimiento y dónde hay tensiones que el equipo ya siente aunque nadie las haya nombrado.<br><br>
+        <strong>Responde desde lo que ves hoy, no desde lo que esperas que sea mañana.</strong> La honestidad en este ejercicio es lo que lo hace útil.
+      </div>
+    </div>
+    <button class="btn-start" onclick="enterTool2()">
+      Comenzar
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </button>
+  </div>
+</section>
+
+<section id="screen-tool2" style="display:none;">
+  <header class="t2-topbar">
+    <button class="t2-back-btn" onclick="backFromTool2()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      Volver
+    </button>
+    <span class="t2-wordmark">¿Cómo está sonando tu equipo?</span>
+    <span class="t2-badge">Herramienta 2</span>
+  </header>
+  <div class="t2-page">
+<div class="stack" id="app">
+
+  <!-- HERO -->
+  <div>
+    <div class="t2-section-label">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+      Arquitectura del equipo
+    </div>
+    <h1 class="hero-title">¿Cómo está sonando hoy tu equipo?</h1>
+    <p class="hero-sub">Una herramienta para leer la arquitectura de tu equipo desde las personas, los roles, el estándar y el lugar que ocupan en el bus. No busca evaluar personas: busca hacer visible cómo está funcionando el sistema.</p>
+  </div>
+
+  <!-- STEP 1: PERSONAS -->
+  <div class="card">
+    <div class="section-head">
+      <span class="step-number">1</span>
+      <h2 class="section-title">Agrega las personas de tu equipo</h2>
+    </div>
+    <div class="grid-auto" id="personas-grid"></div>
+    <div style="margin-top:1rem;">
+      <button class="btn" onclick="addPersona()">
+        <svg class="icon" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Agregar persona
+      </button>
+    </div>
+  </div>
+
+  <!-- STEP 2: MAPA -->
+  <div class="card">
+    <div class="section-head">
+      <span class="step-number">2</span>
+      <h2 class="section-title">Mapa de calor: arquitectura del equipo</h2>
+    </div>
+    <div class="grid-2" id="mapa-grid"></div>
+  </div>
+
+  <!-- STEP 3: GENERAR -->
+  <div style="margin-top:-.5rem;">
+    <button class="btn" onclick="generarLectura()">
+      <svg class="icon" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+      Generar lectura del equipo
+    </button>
+  </div>
+
+  <!-- STEP 4: RESULTADO (hidden until generated) -->
+  <div id="resultado-section" style="display:none;" class="fade-up">
+    <div class="grid-auto">
+
+      <!-- Banda -->
+      <div class="card">
+        <h2 style="font-size:1.35rem;font-weight:700;margin-bottom:1rem;">Tu banda hoy</h2>
+        <div class="btn-row">
+          <button class="btn" onclick="playMelody()">
+            <svg class="icon" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            Escuchar
+          </button>
+          <button class="btn btn-outline" onclick="stopMelody()">
+            <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/></svg>
+            Detener
+          </button>
+          <button class="btn btn-outline" id="wav-btn" onclick="prepararWav()">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Preparar melodía
+          </button>
+          <button class="btn btn-outline" onclick="abrirReporte()">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            Ver reporte
+          </button>
+        </div>
+        <div class="progress-wrap"><div class="progress-bar" id="progress-bar"></div></div>
+        <div id="wav-banner" style="display:none;margin-top:.75rem;" class="dl-banner">
+          <p style="font-weight:600;font-size:.85rem;margin-bottom:.5rem;">Melodía lista:</p>
+          <a id="wav-link" class="btn btn-sm" style="text-decoration:none;" download="melodia-equipo.wav">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Descargar WAV
+          </a>
+        </div>
+        <p style="font-size:.8rem;color:var(--muted);margin-top:.75rem;line-height:1.55;">Escucha cómo está sonando tu equipo hoy. Si hay alguien en D, la melodía se tensiona y desorganiza para hacer visible la fricción del sistema.</p>
+        <div style="margin-top:1rem;display:flex;flex-direction:column;gap:.75rem;" id="instrumentos-list"></div>
+      </div>
+
+      <!-- Retro -->
+      <div class="card-dark">
+        <h2 style="font-size:1.35rem;font-weight:700;margin-bottom:.75rem;">Retroalimentación</h2>
+        <div style="margin-bottom:1.25rem;">
+          <p class="retro-heading" style="color:rgba(237,232,225,0.6);">Lo que está funcionando</p>
+          <div id="retro-fun"></div>
+        </div>
+        <div style="margin-bottom:1.25rem;">
+          <p class="retro-heading" style="color:rgba(237,232,225,0.5);">Lo que podría ajustarse</p>
+          <div id="retro-adj"></div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- DESCARGA -->
+  <div id="t2-download-section" style="display:none;" class="t2-download-section">
+    <div class="t2-download-inner">
+      <div class="t2-download-text">
+        <p class="t2-download-label">Descarga tu sesión</p>
+        <p class="t2-download-sub">Guarda la melodía de tu equipo y el reporte completo en PDF.</p>
+      </div>
+      <div class="t2-download-actions">
+        <button class="btn-dl" onclick="t2PrepararWavDescarga()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+          Melodía del equipo
+        </button>
+        <button class="btn-dl" onclick="abrirReporte()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Reporte en PDF
+        </button>
+        <a id="t2-wav-link-bottom" style="display:none;" download="melodia-equipo.wav">
+          <button class="btn-dl btn-dl-secondary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Guardar WAV
+          </button>
+        </a>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /app -->
+</div><!-- /page -->
+</section>
+
+<script>
+
+
+
+const VP = 'Voluntad profesional';
+const HP = 'Humildad personal';
+
+// Items: type 'mcq' or 'open'
+const items = [
+  // ---- VOLUNTAD PROFESIONAL ----
+  {
+    type: 'mcq', char: VP,
+    dimension: 'Conversaciones difíciles',
+    context: 'Voluntad profesional',
+    text: 'Cuando una persona de tu equipo no entrega resultados al nivel que la empresa lo necesita, ¿qué describe mejor lo que has hecho?',
+    subtext: 'Piensa en lo que hiciste la última vez que esto ocurrió, no en lo que harías.',
+    options: [
+      { text: 'Lo he dejado pasar, porque el momento no era el indicado o el problema no justificaba llegar a ese punto.', score: 1 },
+      { text: 'Lo mencioné de forma general, sin entrar en el fondo para no afectar la relación.', score: 2 },
+      { text: 'Lo hablé directamente, aunque fui más cuidadoso de lo que la situación probablemente requería.', score: 3 },
+      { text: 'Lo hablé con claridad, nombré el problema, expliqué el impacto y acordamos qué cambia y en qué plazo.', score: 4 }
+    ]
+  },
+  {
+    type: 'mcq', char: VP,
+    dimension: 'Responsabilidad en el fracaso',
+    context: 'Voluntad profesional',
+    text: 'Un proyecto clave no dio los resultados esperados. Cuando analizas lo que pasó con tu equipo o líder, ¿dónde termina generalmente la conversación?',
+    subtext: 'Recuerda una conversación concreta. ¿Cómo terminó realmente, no cómo debería haber terminado?',
+    options: [
+      { text: 'En los factores externos, como otras áreas, el presupuesto o el mercado, cosas que estuvieron fuera de mi control.', score: 1 },
+      { text: 'En una revisión mixta, donde reconozco mis errores pero también lo que el entorno impuso.', score: 2 },
+      { text: 'Principalmente en mis decisiones, aunque me sigo preguntando cuánto fue mío y cuánto fue el contexto.', score: 3 },
+      { text: 'En lo que yo pude haber hecho diferente, porque el contexto existió pero lo único que puedo cambiar son mis propias decisiones.', score: 4 }
+    ]
+  },
+  {
+    type: 'mcq', char: VP,
+    dimension: 'Estándar de excelencia',
+    context: 'Voluntad profesional',
+    text: 'Tu proceso está cumpliendo los resultados esperados. Tu equipo está bien, no hay alertas. ¿Cómo describes tu estado de ánimo respecto a los resultados?',
+    subtext: 'Piensa en este momento, en tu equipo actual. ¿Qué estás sintiendo de verdad?',
+    options: [
+      { text: 'Tranquilidad, porque estamos donde debemos estar y eso es lo que el equipo y yo hemos trabajado para lograr.', score: 1 },
+      { text: 'Satisfacción, porque cumplir es un logro real que merece reconocerse, aunque siempre haya cosas por mejorar.', score: 2 },
+      { text: 'Una mezcla entre alivio e inquietud, porque me alegra que estemos bien pero ya tengo la cabeza en qué ajustaría.', score: 3 },
+      { text: 'Inquietud, porque cumplir no me cierra el tema y siempre existe distancia entre donde estamos y donde podríamos estar.', score: 4 }
+    ]
+  },
+  {
+    type: 'mcq', char: VP,
+    dimension: 'Horizonte de decisión',
+    context: 'Voluntad profesional',
+    text: 'Tienes que tomar una decisión que será beneficiosa en el largo plazo pero que generará incomodidad a tu equipo en el corto plazo. ¿Qué sueles hacer?',
+    subtext: 'Trae a la mente una decisión reciente de ese tipo. ¿Qué hiciste en ese momento?',
+    options: [
+      { text: 'Priorizo lo que el equipo necesita ahora, porque un equipo desestabilizado tampoco puede sostener resultados de largo plazo.', score: 1 },
+      { text: 'Busco si hay una tercera opción que no implique esa incomodidad, porque casi siempre hay caminos que no se ven a primera vista.', score: 2 },
+      { text: 'Avanzo hacia la decisión de largo plazo, pero me tomo tiempo para preparar bien la transición y reducir el impacto en el equipo.', score: 3 },
+      { text: 'Tomo la decisión de largo plazo y la ejecuto pronto, porque postergar solo acumula consecuencias para todos.', score: 4 }
+    ]
+  },
+  {
+    type: 'mcq', char: VP,
+    dimension: 'Tolerancia a la incomodidad',
+    context: 'Voluntad profesional',
+    text: 'Piensa en la última vez que evitaste una conversación muy difícil con alguien de tu equipo o con tu líder. ¿Cuánto tiempo pasó antes de que la tuvieras?',
+    subtext: 'Piensa en una situación concreta, no en cómo te gustaría que fuera tu patrón.',
+    options: [
+      { text: 'Meses, o todavía no la he tenido, porque prefiero explorar otras salidas antes de llegar a ese punto.', score: 1 },
+      { text: 'Semanas, porque necesito tiempo para procesarla y encontrar el momento adecuado.', score: 2 },
+      { text: 'Días, porque sé que debo tenerla y no me permito posponerla demasiado.', score: 3 },
+      { text: 'Rápido, a veces en el momento mismo, porque la tensión de no decirlo me pesa más que la incomodidad de decirlo.', score: 4 }
+    ]
+  },
+  {
+    type: 'mcq', char: VP,
+    dimension: 'Gestión del talento',
+    context: 'Voluntad profesional',
+    text: 'Hay una persona de tu equipo que, si bien cumple con lo necesario, no tiene proyección de crecimiento, no tiene resultados excepcionales y sabes que alguien podría hacerlo mucho mejor en su lugar. ¿Qué describe mejor lo que ha pasado?',
+    subtext: 'Piensa en alguien específico de tu equipo hoy. ¿Qué ha pasado realmente con esa situación?',
+    options: [
+      { text: 'No he actuado, porque no tengo certeza suficiente de que el problema sea la persona y no el rol o el contexto.', score: 1 },
+      { text: 'Le he dado más tiempo, porque pienso que con acompañamiento consistente las personas pueden cambiar.', score: 2 },
+      { text: 'He hablado con ella sobre su desempeño, sin entrar aún en lo que podría ocurrir si la situación no cambia.', score: 3 },
+      { text: 'He tomado una decisión sobre su continuidad o su rol, pensando en lo que el equipo necesita.', score: 4 }
+    ]
+  },
+  // ---- OPEN VP ----
+  {
+    type: 'open', char: VP,
+    dimension: 'Reflexión personal',
+    context: 'Voluntad profesional',
+    text: '¿Qué decisión estoy evitando hoy que sé que un líder nivel 5 ya habría tomado?',
+    placeholder: 'Escribe tu reflexión aquí...'
+  },
+  // ---- HUMILDAD PERSONAL ----
+  {
+    type: 'mcq', char: HP,
+    dimension: 'A quién va el crédito',
+    context: 'Humildad personal',
+    text: 'Tu equipo acaba de lograr algo importante. Cuando hablas de esto, ¿cómo sueles presentar ese resultado?',
+    subtext: 'Recuerda la última vez que presentaste un resultado así. ¿Cómo lo contaste exactamente?',
+    options: [
+      { text: 'Destaco la dirección y las decisiones que hicieron posible el resultado, y también reconozco que el equipo ejecutó.', score: 1 },
+      { text: 'Lo presento como un logro compartido entre el equipo y el liderazgo.', score: 2 },
+      { text: 'Hablo del equipo principalmente, aunque en algún punto señalo qué vino de mi parte.', score: 3 },
+      { text: 'Hablo del equipo, porque mi trabajo fue crear las condiciones y el mérito del resultado es de ellos.', score: 4 }
+    ]
+  },
+  {
+    type: 'mcq', char: HP,
+    dimension: 'Modestia y presencia',
+    context: 'Humildad personal',
+    text: 'Alguien del equipo hace un trabajo brillante, mejor de lo que tú lo habrías hecho. ¿Qué sueles sentir?',
+    subtext: 'Trae a la mente la última vez que esto ocurrió. ¿Qué pasó por tu cabeza en ese momento?',
+    options: [
+      { text: 'Alegría por el resultado, pero también algo de incomodidad porque siento que mi figura como líder queda en segundo plano.', score: 1 },
+      { text: 'Orgullo por el resultado y, a la vez, un impulso de revisar dónde puedo seguir creciendo yo.', score: 2 },
+      { text: 'Reconocimiento genuino, aunque me aparece la necesidad de hacer visible también mi parte en ese resultado.', score: 3 },
+      { text: 'Satisfacción real, porque que alguien de mi equipo llegue más lejos de lo que yo llegaría es exactamente lo que busco.', score: 4 }
+    ]
+  },
+  {
+    type: 'mcq', char: HP,
+    dimension: 'Fuente de motivación',
+    context: 'Humildad personal',
+    text: 'Cuando tu equipo necesita motivación para enfrentar un desafío difícil, ¿de dónde viene esa energía principalmente?',
+    subtext: 'Piensa en la última situación difícil que enfrentó tu equipo. ¿Qué fue lo que los movió?',
+    options: [
+      { text: 'De mí, porque soy quien marca el tono y sostiene el ritmo cuando las cosas se ponen difíciles.', score: 1 },
+      { text: 'De los dos, porque hay un propósito claro pero en los momentos más críticos mi presencia marca la diferencia.', score: 2 },
+      { text: 'Principalmente del equipo, aunque hay momentos en que necesitan que yo intervenga para retomar el rumbo.', score: 3 },
+      { text: 'Del propósito compartido, porque el equipo sabe por qué hace lo que hace y eso los sostiene aunque yo no esté.', score: 4 }
+    ]
+  },
+  {
+    type: 'mcq', char: HP,
+    dimension: 'Legado y sucesión',
+    context: 'Humildad personal',
+    text: 'Si hoy te asignaran a otro rol o te fueras de la empresa, ¿qué pasaría con tu área en los próximos seis meses?',
+    subtext: 'Responde pensando en cómo está tu equipo hoy, no en cómo te gustaría que estuviera.',
+    options: [
+      { text: 'Habría caos, porque hay conocimiento, relaciones y decisiones que dependen directamente de mi presencia.', score: 1 },
+      { text: 'Funcionaría, pero con esfuerzo, porque el potencial está pero todavía falta estructura para operar de forma autónoma.', score: 2 },
+      { text: 'Habría ajustes manejables, porque tengo personas que podrían absorber las responsabilidades más críticas.', score: 3 },
+      { text: 'Seguiría sin problema, porque he trabajado para que el equipo pueda operar bien sin depender de que yo esté.', score: 4 }
+    ]
+  },
+  {
+    type: 'mcq', char: HP,
+    dimension: 'La ventana y el espejo',
+    context: 'Humildad personal',
+    text: 'Cuando miras la trayectoria de tu equipo en el último año —los logros, los tropiezos, los resultados y el clima que viven— ¿a qué o a quién atribuyes principalmente lo que ves?',
+    subtext: 'Mira el año que pasó, no el que viene. ¿A qué le atribuyes lo que ves?',
+    options: [
+      { text: 'Al contexto en gran parte, porque hubo muchas variables fuera de lo que yo podía controlar.', score: 1 },
+      { text: 'A varios factores, porque mi liderazgo influyó pero también las personas que había, las condiciones del negocio y decisiones que no controlé.', score: 2 },
+      { text: 'Sobre todo a mi liderazgo, aunque hay aspectos del equipo o del entorno que estuvieron fuera de mi alcance.', score: 3 },
+      { text: 'A mi liderazgo principalmente, porque lo que el equipo es hoy tiene la firma de cómo los he liderado, para bien y para mal.', score: 4 }
+    ]
+  },
+  {
+    type: 'mcq', char: HP,
+    dimension: 'Presencia en reuniones',
+    context: 'Humildad personal',
+    text: 'Cuando tu equipo está en una reunión importante, ¿qué rol sueles asumir?',
+    subtext: 'Piensa en la última reunión importante que tuviste con tu equipo. ¿Qué rol asumiste?',
+    options: [
+      { text: 'Hablo bastante, porque tengo criterio sobre los temas y no aportarlo sería desperdiciar lo que la sala necesita.', score: 1 },
+      { text: 'Escucho y facilito, aunque al final hago el cierre para que las conclusiones queden claras.', score: 2 },
+      { text: 'Hago más preguntas que afirmaciones, aunque cuando el debate se estanca o pierde el hilo intervengo.', score: 3 },
+      { text: 'Pregunto y escucho, porque mi trabajo es abrir el espacio para que el equipo piense, no ocuparlo yo.', score: 4 }
+    ]
+  },
+  // ---- OPEN HP ----
+  {
+    type: 'open', char: HP,
+    dimension: 'Reflexión personal',
+    context: 'Humildad personal',
+    text: '¿En qué situación reciente prioricé mi ego —imagen, comodidad, aprobación— por encima del resultado?',
+    placeholder: 'Escribe tu reflexión aquí...'
+  }
+];
+
+const reflectionMap = {
+  'Conversaciones difíciles': {
+    title: 'Cada día que esperas le cuesta algo a alguien.',
+    body: 'No tener la conversación difícil no es neutral. Es una decisión activa que tiene consecuencias reales para la persona que la necesita, para el equipo que la observa y para la organización que depende de ti. <strong>El nivel 5 no se siente cómodo con la incomodidad. La acepta como el precio del respeto genuino.</strong>',
+    cta: '¿Hay alguien en tu equipo que lleva esperando una conversación que aún no has tenido?'
+  },
+  'Responsabilidad en el fracaso': {
+    title: 'La narrativa del entorno protege el ego, no la organización.',
+    body: 'Cuando el fracaso siempre tiene una explicación externa, la organización aprende que no vale la pena arriesgarse. <strong>El espejo no existe para castigarse. Existe para aprender lo único que está bajo tu control: tus propias decisiones.</strong>',
+    cta: '¿Qué decisión tuya contribuyó al último resultado que no esperabas?'
+  },
+  'Estándar de excelencia': {
+    title: '"Cumplir" no es lo mismo que "avanzar".',
+    body: 'Las organizaciones extraordinarias no lo son porque sus líderes se conformaron con cumplir. Lo son porque hubo alguien que nunca dejó de preguntar si existía una forma mejor. <strong>La inquietud del nivel 5 no es un defecto de carácter. Es el motor.</strong>',
+    cta: '¿Qué pregunta incómoda llevas tiempo sin hacerte sobre cómo opera tu área?'
+  },
+  'Horizonte de decisión': {
+    title: 'Las decisiones que cuidan el largo plazo son las más solitarias.',
+    body: 'Nadie aplaude hoy una decisión cuyos frutos se verán en tres años. Por eso el nivel 5 requiere valentía, no solo visión. <strong>La voluntad inquebrantable no habla de fuerza física, sino de la capacidad de sostener una convicción cuando nadie más la ve todavía.</strong>',
+    cta: '¿Hay una decisión de largo plazo que sabes que debes tomar y que la presión del corto sigue postergando?'
+  },
+  'Tolerancia a la incomodidad': {
+    title: 'Aplazar no es proteger. Es acumular deuda.',
+    body: 'Cada conversación que no tienes se convierte en un peso que carga el equipo sin saber exactamente por qué. <strong>El rigor del nivel 5 no es frialdad. Es la decisión consciente de que el respeto genuino se expresa en claridad temprana, no en silencio compasivo.</strong>',
+    cta: '¿Hay una conversación que estás aplazando hoy que, en el fondo, ya sabes que debes tener?'
+  },
+  'Gestión del talento': {
+    title: 'Mantener a alguien en el lugar equivocado no es lealtad. Es otra forma de abandono.',
+    body: 'Cuando permitimos que alguien permanezca en un rol donde no puede dar lo mejor, le robamos la posibilidad de encontrar el lugar donde sí puede brillar. Y el equipo lo sabe. <strong>El nivel 5 toma decisiones de talento pensando en lo que es justo para todos, no en lo que le resulta cómodo a él.</strong>',
+    cta: '¿Hay alguien en tu equipo hoy cuya permanencia en ese rol es más cómoda para ti que buena para ellos?'
+  },
+  'A quién va el crédito': {
+    title: 'El crédito que te quedas es el liderazgo que pierdes.',
+    body: 'Cuando atribuyes el mérito a tu equipo, no pierdes poder. Lo multiplicas. La gente trabaja distinto cuando sabe que su contribución será reconocida, no absorbida. <strong>El nivel 5 sabe que el crédito que suelta es lo que más lo define como líder.</strong>',
+    cta: '¿Cuándo fue la última vez que tu nombre no apareció en una historia de éxito que tú lideraste?'
+  },
+  'Modestia y presencia': {
+    title: 'Un equipo brillante no opaca a su líder. Lo revela.',
+    body: 'Si sientes incomodidad cuando alguien de tu equipo te supera, esa incomodidad tiene un nombre: inseguridad disfrazada de liderazgo. <strong>El nivel 5 construye deliberadamente personas que sean más capaces que él. Eso no lo hace prescindible. Lo hace extraordinario.</strong>',
+    cta: '¿A quién de tu equipo estás desarrollando para que te supere?'
+  },
+  'Fuente de motivación': {
+    title: 'Un equipo que depende de ti no puede crecer más allá de ti.',
+    body: 'Si tu equipo necesita tu energía para moverse, has construido una dependencia, no un liderazgo. <strong>El nivel 5 trabaja para volverse innecesario como fuente de motivación</strong>, y para que el propósito del trabajo sea lo que sostenga al equipo cuando él no está.',
+    cta: '¿Sabe tu equipo, con claridad, por qué importa lo que hace? ¿Se lo dijiste tú, o lo descubrieron juntos?'
+  },
+  'Legado y sucesión': {
+    title: 'Si la organización te necesita para funcionar, algo salió mal.',
+    body: 'La dependencia no es liderazgo. Es una trampa elegante. <strong>Un líder de nivel 5 mide su éxito no en lo indispensable que es, sino en lo bien que funciona todo cuando él no está.</strong> Construir un sucesor es el acto de humildad más difícil y más poderoso que existe.',
+    cta: '¿A quién estás preparando hoy para que haga mejor que tú lo que tú haces?'
+  },
+  'La ventana y el espejo': {
+    title: 'Lo que ves en tu equipo es, en gran parte, un reflejo de cómo los lideras.',
+    body: 'El clima de un equipo, su nivel de compromiso, su disposición a dar lo mejor: todo eso tiene una firma. Y esa firma es la tuya. <strong>El nivel 5 no se paraliza con esa responsabilidad. La usa como brújula.</strong> Porque si el problema soy yo, también soy la solución.',
+    cta: '¿Qué parte del clima de tu equipo hoy es el resultado directo de cómo los estás liderando?'
+  },
+  'Presencia en reuniones': {
+    title: 'Cuánto espacio ocupas en una sala dice cuánto le tienes fe a tu equipo.',
+    body: 'Hablar más de lo necesario en una reunión no es aportar valor. Es llenar un silencio que el equipo necesita para pensar. <strong>El nivel 5 hace las preguntas que abren, no los discursos que cierran.</strong> Su presencia crea espacio, no dependencia.',
+    cta: '¿Cuánto del tiempo hablas tú en las reuniones de tu equipo?'
+  }
+};
+
+const charInfo = {
+  [VP]: { label: 'Voluntad profesional', dims: [0,1,2,3,4,5], cls: 'vp' },
+  [HP]: { label: 'Humildad personal',    dims: [7,8,9,10,11,12], cls: 'hp' }
+};
+
+const MCQ_TOTAL = 12; // number of mcq items
+let current = 0;
+let answers = new Array(items.length).fill(null); // null for mcq, string for open
+let openTexts = {}; // index -> text
+
+function startQuiz() {
+  document.getElementById('cover').style.display = 'none';
+  document.getElementById('quiz').style.display = 'block';
+  renderItem(); window.scrollTo(0,0);
+}
+
+function getMcqIndex(itemIdx) {
+  // Returns the mcq sequence index (1-based display) for a given item index
+  let count = 0;
+  for (let i = 0; i <= itemIdx; i++) { if (items[i].type === 'mcq') count++; }
+  return count;
+}
+
+function getTotalMcq() {
+  return items.filter(i => i.type === 'mcq').length;
+}
+
+function renderItem() {
+  const item = items[current];
+  const totalItems = items.length;
+
+  // Progress
+  document.getElementById('prog-fill').style.width = `${((current + 1) / totalItems) * 100}%`;
+
+  // Counter shows MCQ position if mcq, else open question marker
+  if (item.type === 'mcq') {
+    document.getElementById('q-counter').textContent = `${getMcqIndex(current)} / ${getTotalMcq()}`;
+  } else {
+    document.getElementById('q-counter').textContent = 'Pregunta abierta';
+  }
+
+  // Nav
+  document.getElementById('btn-back').disabled = current === 0;
+  const isLast = current === items.length - 1;
+
+  // Render area
+  const area = document.getElementById('question-area');
+
+  if (item.type === 'mcq') {
+    const sel = answers[current];
+    document.getElementById('btn-next').disabled = sel === null;
+    document.getElementById('btn-next').textContent = isLast ? 'Ver mis resultados →' : 'Siguiente →';
+
+    const vpColor = 'var(--forest)'; const hpColor = 'var(--forest-mid)';
+    const isVP = item.char === VP;
+    const accentColor = isVP ? vpColor : hpColor;
+    const bgColor = isVP ? 'rgba(80,70,200,0.10)' : 'rgba(26,155,114,0.10)';
+
+    area.innerHTML = `
+      <div class="char-banner" style="border-left-color:${accentColor};background:${bgColor}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="${accentColor}" stroke-width="2" style="width:16px;height:16px;flex-shrink:0"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <div><span class="char-banner-text" style="color:${accentColor}">${item.char}</span></div>
+      </div>
+      <div class="q-text">${item.text}</div>
+      ${item.subtext ? `<div class="q-subtext">${item.subtext}</div>` : ""}
+      <div class="options">
+        ${item.options.map((opt, i) => `
+          <button class="opt-btn ${sel === i ? 'selected' : ''}" onclick="selectOpt(${i})">
+            <div class="opt-marker"></div>
+            <div class="opt-text">${opt.text}</div>
+          </button>`).join('')}
+      </div>`;
+  } else {
+    // Open question
+    document.getElementById('btn-next').disabled = false;
+    document.getElementById('btn-next').textContent = isLast ? 'Ver mis resultados →' : 'Siguiente →';
+    const savedText = openTexts[current] || '';
+    const isVP = item.char === VP;
+    const accentColor = isVP ? 'var(--forest)' : 'var(--forest-mid)';
+    const bgColor = isVP ? 'rgba(80,70,200,0.10)' : 'rgba(26,155,114,0.10)';
+
+    area.innerHTML = `
+      <div class="char-banner" style="border-left-color:${accentColor};background:${bgColor}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="${accentColor}" stroke-width="2" style="width:16px;height:16px;flex-shrink:0"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <div><span class="char-banner-text" style="color:${accentColor}">${item.char}</span></div>
+      </div>
+      <div class="open-q-card">
+        <div class="open-q-label">Pregunta de reflexión personal</div>
+        <div class="open-q-text">${item.text}</div>
+        <textarea class="open-q-textarea" id="open-textarea" placeholder="${item.placeholder}" oninput="saveOpen()">${savedText}</textarea>
+        <div class="open-q-note">Esta respuesta es solo tuya. No afecta tu puntaje.</div>
+      </div>`;
+  }
+}
+
+function selectOpt(i) {
+  answers[current] = i;
+  renderItem();
+}
+
+function saveOpen() {
+  const ta = document.getElementById('open-textarea');
+  if (ta) openTexts[current] = ta.value;
+}
+
+function goBack() {
+  if (items[current].type === 'open') saveOpen();
+  if (current > 0) { current--; renderItem(); window.scrollTo(0,0); }
+}
+
+function goNext() {
+  if (items[current].type === 'open') saveOpen();
+  if (items[current].type === 'mcq' && answers[current] === null) return;
+  if (current < items.length - 1) { current++; renderItem(); window.scrollTo(0,0); }
+  else showResults();
+}
+
+function showResults() {
+  document.getElementById('quiz').style.display = 'none';
+  document.getElementById('results').style.display = 'block';
+  window.scrollTo(0,0);
+  setTimeout(function(){ var b=document.getElementById('btn-go-tool2'); if(b)b.style.display='inline-flex'; }, 600);
+  setTimeout(function(){ var b=document.getElementById('btn-go-tool2'); if(b)b.style.display='inline-flex'; },600);
+
+  // Only MCQ items score
+  const mcqItems = items.map((item, i) => ({ item, i })).filter(x => x.item.type === 'mcq');
+  const total = mcqItems.reduce((s, x) => s + (answers[x.i] !== null ? x.item.options[answers[x.i]].score : 0), 0);
+  document.getElementById('r-score').textContent = total;
+
+  // Ring animate
+  const circ = 314;
+  setTimeout(() => {
+    const el = document.getElementById('ring-dash');
+    el.style.transition = 'stroke-dashoffset 1.3s cubic-bezier(0.4,0,0.2,1)';
+    el.style.strokeDashoffset = circ - (total / 40) * circ;
+  }, 120);
+
+  // Profile
+  let label, desc;
+  if (total <= 16) {
+    label = 'El liderazgo que construye dependencia';
+    desc = 'Tu perfil refleja patrones comunes en líderes que están empezando su camino: buscar reconocimiento, evitar lo incómodo, atribuir al entorno. No es un juicio, es un punto de partida. La distancia entre donde estás y el nivel 5 no se mide en talento, sino en las elecciones que haces cada día con las personas de tu equipo.';
+  } else if (total <= 25) {
+    label = 'El liderazgo en tensión';
+    desc = 'Hay algo genuino en ti que quiere liderar bien. También hay patrones que te frenan: la necesidad de ser visto, la dificultad de soltar el control, la incomodidad con las conversaciones difíciles. La buena noticia: ya sabes cuál es la tensión. Lo que sigue es decidir cuál de los dos va a ganar.';
+  } else if (total <= 33) {
+    label = 'El liderazgo que ya está eligiendo';
+    desc = 'Demuestras comportamientos genuinos del nivel 5 en la mayoría de tus decisiones. El desafío ahora no es saber qué hacer, sino sostenerlo cuando el contexto presiona en la dirección contraria. El nivel 5 no es brillantez ocasional. Es consistencia.';
+  } else {
+    label = 'El liderazgo que deja algo que dura';
+    desc = 'Tus respuestas apuntan a un líder que ha aprendido la lección más difícil: que el ego propio es el mayor obstáculo para construir algo verdaderamente grande. La pregunta que se abre no es si eres un líder de nivel 5, sino cuántas personas de tu equipo podrán serlo gracias a ti.';
+  }
+  document.getElementById('r-label').textContent = label;
+  document.getElementById('r-desc').textContent = desc;
+
+  // Char blocks — only MCQ items, grouped by char
+  const charDescMap = {
+    [VP]: 'La capacidad de hacer lo que se debe hacer, aunque sea difícil, incómodo o impopular. Se mide en decisiones concretas, no en intenciones.',
+    [HP]: 'La disposición a poner el éxito del equipo y la organización por encima del reconocimiento propio. Se expresa en cómo atribuyes los logros, cómo construyes a otros y qué tan prescindible te vuelves.'
+  };
+  const charBlocksHTML = [VP, HP].map(char => {
+    const charDesc = charDescMap[char];
+    const charMcqs = mcqItems.filter(x => x.item.char === char);
+    const charScore = charMcqs.reduce((s, x) => s + (answers[x.i] !== null ? x.item.options[answers[x.i]].score : 0), 0);
+    const maxScore = charMcqs.length * 4;
+    const pct = Math.round((charScore / maxScore) * 100);
+    const cls = char === VP ? 'vp' : 'hp';
+    return `
+      <div class="char-block">
+        <div class="char-block-header">
+          <div class="char-block-name">${char}</div>
+          <div class="char-block-score ${cls}">${charScore}<span style="font-size:14px;font-weight:400;opacity:0.5"> / ${maxScore}</span></div>
+        </div>
+        <div class="char-block-desc">${charDesc}</div>
+        <div class="char-block-bar-track">
+          <div class="char-block-bar-fill ${cls}" data-pct="${pct}"></div>
+        </div>
+        ${charMcqs.map(x => {
+          const score = answers[x.i] !== null ? x.item.options[answers[x.i]].score : 0;
+          const color = cls === 'vp' ? 'var(--forest)' : 'var(--forest-mid)';
+          return `<div class="char-dim-row">
+            <div class="char-dim-name">${x.item.dimension}</div>
+            <div class="char-dim-score" style="color:${color}">${score}/4</div>
+          </div>`;
+        }).join('')}
+      </div>`;
+  }).join('');
+  document.getElementById('char-blocks').innerHTML = charBlocksHTML;
+
+  setTimeout(() => {
+    document.querySelectorAll('.char-block-bar-fill').forEach(el => {
+      el.style.transition = 'width 1s cubic-bezier(0.4,0,0.2,1)';
+      el.style.width = el.dataset.pct + '%';
+    });
+  }, 200);
+
+  // Reflections: 3 lowest-scoring MCQ dimensions
+  const dimScores = mcqItems.map(x => ({
+    dim: x.item.dimension,
+    score: answers[x.i] !== null ? x.item.options[answers[x.i]].score : 0
+  })).sort((a, b) => a.score - b.score).slice(0, 3);
+
+  document.getElementById('reflections').innerHTML = dimScores.map(d => {
+    const r = reflectionMap[d.dim];
+    if (!r) return '';
+    return `<div class="refl-card">
+      <div class="refl-dim">${d.dim}</div>
+      <div class="refl-title">${r.title}</div>
+      <div class="refl-body">${r.body}</div>
+      <div class="refl-cta">${r.cta}</div>
+    </div>`;
+  }).join('');
+
+  // Open answers
+  const openItems = items.map((item, i) => ({ item, i })).filter(x => x.item.type === 'open');
+  document.getElementById('open-answers').innerHTML = openItems.map(x => {
+    const txt = openTexts[x.i] || '';
+    return `<div class="open-result-card">
+      <div class="open-result-label">${x.item.char} · Reflexión personal</div>
+      <div class="open-result-q">${x.item.text}</div>
+      <div class="open-result-a ${!txt ? 'empty' : ''}">${txt || 'Sin respuesta registrada.'}</div>
+    </div>`;
+  }).join('');
+
+  // Answers detail
+  const sc = [null,'s1','s2','s3','s4'];
+  document.getElementById('answers-detail').innerHTML = mcqItems.map(x => {
+    const score = answers[x.i] !== null ? x.item.options[answers[x.i]].score : 0;
+    const txt = answers[x.i] !== null ? x.item.options[answers[x.i]].text : '—';
+    return `<div class="answer-item">
+      <div class="a-badge ${sc[score]}">${score}</div>
+      <div>
+        <div class="a-tag">${x.item.char} · ${x.item.dimension}</div>
+        <div class="a-text">${txt}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function restart() {
+  current = 0;
+  answers = new Array(items.length).fill(null);
+  openTexts = {};
+  document.getElementById('results').style.display = 'none';
+  var t=document.getElementById('screen-transition'); if(t)t.style.display='none';
+  var t2=document.getElementById('screen-tool2'); if(t2)t2.style.display='none';
+  document.getElementById('cover').style.display = 'none';
+  document.getElementById('screen-home').style.display = 'flex';
+  window.scrollTo(0,0);
+}
+
+
+
+// ── NAVIGATION ────────────────────────────────────────────────────────────
+function goToTransition() {
+  document.getElementById('results').style.display = 'none';
+  var ts = document.getElementById('screen-transition');
+  ts.style.display = 'flex';
+  window.scrollTo(0,0);
+  // particles
+  var bg = document.getElementById('trans-particles');
+  bg.innerHTML = '';
+  for(var i=0;i<22;i++){
+    var p=document.createElement('div');
+    p.className='trans-particle';
+    var sz=Math.random()*2.5+1;
+    var x=Math.random()*100;
+    var drift=(Math.random()-0.5)*90;
+    var dur=Math.random()*9+6;
+    var del=Math.random()*6;
+    p.style.cssText='width:'+sz+'px;height:'+sz+'px;left:'+x+'%;'
+      +'background:rgba(200,210,180,'+(Math.random()*0.3+0.08)+');'
+      +'--drift:'+drift+'px;animation-duration:'+dur+'s;animation-delay:'+del+'s;';
+    bg.appendChild(p);
+  }
+}
+function goToTool2() {
+  document.getElementById('screen-transition').style.display = 'none';
+  document.getElementById('screen-tool2').style.display = 'block';
+  window.scrollTo(0,0);
+  // Initialize tool2 now that its DOM is visible
+  render();
+}
+
+
+let genero = "Sinfónica";
+
+// ─── DATA ──────────────────────────────────────────────────────────────────────
+const MELODY_SECONDS = 20;
+
+const APORTES = [
+  "Sostiene el ritmo","Conecta al equipo","Impulsa ideas","Ejecuta con calidad",
+  "Resuelve problemas","Cuida el detalle","Aporta energía","Ordena el trabajo",
+  "Aprende y mejora","Hoy aporta poco al sistema"
+];
+
+const CUADRANTES = [
+  { id:"A", titulo:"Persona correcta / silla correcta",     descripcion:"Eleva el estándar, tiene buen encaje con el rol y no necesita control constante para rendir.",              decision:"Cuidar, retar y darle mejores oportunidades.",                                 color:"#d1fae5", bg:"#ecfdf5" },
+  { id:"B", titulo:"Persona correcta / silla incorrecta",   descripcion:"Tiene potencial y cultura, pero el rol actual no le permite entregar su mejor aporte.",                    decision:"Mover, rediseñar rol o reubicar antes de concluir que no funciona.",             color:"#bae6fd", bg:"#f0f9ff" },
+  { id:"C", titulo:"Silla correcta / persona a desarrollar",descripcion:"El rol es necesario, pero la persona aún requiere desarrollo, práctica o acompañamiento.",                decision:"Definir foco de desarrollo y tiempo justo para comprobar avance.",              color:"#fde68a", bg:"#fffbeb" },
+  { id:"D", titulo:"No es el bus para la persona",          descripcion:"Hay una tensión fuerte entre persona, rol y sistema; sostenerla baja coordinación, confianza y estándar.",decision:"Tomar una decisión consciente y no normalizar la fricción.",                    color:"#fecaca", bg:"#fff1f2" }
+];
+
+const INSTR = {
+  "Sostiene el ritmo":         { icono:"🥁", nombre:"Percusión",       sentido:"sostiene ritmo, constancia y cadencia",               baseFreq:130.81 },
+  "Conecta al equipo":         { icono:"🎸", nombre:"Bajo",            sentido:"une, sostiene y conecta al conjunto",                 baseFreq:196    },
+  "Impulsa ideas":             { icono:"🎷", nombre:"Saxofón",         sentido:"abre posibilidades, variaciones e improvisación",     baseFreq:392    },
+  "Ejecuta con calidad":       { icono:"🎻", nombre:"Violín",          sentido:"aporta precisión, detalle y estándar",                baseFreq:659.25 },
+  "Resuelve problemas":        { icono:"🎹", nombre:"Piano",           sentido:"ordena, resuelve y da estructura cuando hay tensión", baseFreq:329.63 },
+  "Cuida el detalle":          { icono:"🪈", nombre:"Flauta",          sentido:"aporta detalle, sutileza y precisión fina",           baseFreq:783.99 },
+  "Aporta energía":            { icono:"🎺", nombre:"Trompeta",        sentido:"levanta la energía y moviliza al conjunto",           baseFreq:523.25 },
+  "Ordena el trabajo":         { icono:"🎼", nombre:"Metrónomo",       sentido:"da estructura, orden y continuidad al sistema",       baseFreq:220    },
+  "Aprende y mejora":          { icono:"🎧", nombre:"Sampler",         sentido:"incorpora aprendizaje y adapta el sonido del equipo", baseFreq:440    },
+  "Hoy aporta poco al sistema":{ icono:"🔇", nombre:"Silencio/ruido",  sentido:"hoy no está generando aporte claro al sistema",      baseFreq:110    }
+};
+
+const NOTE_FREQ  = [261.63,329.63,392,523.25,329.63,392,440,392,523.25,440,392,329.63,293.66,261.63];
+const TENSE_FREQ = [261.63,277.18,311.13,369.99,415.3,466.16,277.18,369.99];
+const CHORD_PROG = [[130.81,164.81,196,261.63],[98,146.83,196,246.94],[110,164.81,220,261.63],[87.31,130.81,174.61,220]];
+const BASS_PROG  = [65.41,49,55,43.65];
+
+// ─── STATE ────────────────────────────────────────────────────────────────────
+let personas = [emptyPersona()];
+let audioCtx = null;
+let audioTimeout = null;
+let progressInterval = null;
+let audioUrl = null;
+
+function emptyPersona() {
+  return { nombre:"", rol:"", recontratar:"", salida:"", control:"", estandar:"", porque:"", rolCorrecto:"", cuadrante:"", aportes:[] };
+}
+
+// ─── RENDER ───────────────────────────────────────────────────────────────────
+function render() {
+  renderPersonas();
+  renderMapa();
+}
+
+function renderPersonas() {
+  const grid = document.getElementById("personas-grid");
+  grid.innerHTML = personas.map((p,i) => personaCardHTML(p,i)).join("");
+}
+
+function personaCardHTML(p, i) {
+  const cuadBtns = CUADRANTES.map(c => {
+    const sel = p.cuadrante === c.id;
+    return `<button type="button" class="q-btn" onclick="setCuadrante(${i},'${c.id}')"
+      style="border-color:${sel?"#18181b":c.color};background:${sel?"#18181b":c.bg};">
+      <div class="q-btn-title" style="color:${sel?"#fff":"#18181b"};">${c.id} · ${c.titulo}</div>
+      <div class="q-btn-desc" style="color:${sel?"#d4d4d8":"#52525b"};">${c.descripcion}</div>
+    </button>`;
+  }).join("");
+
+  const aportePills = APORTES.map(a => {
+    const sel = p.aportes.includes(a);
+    return `<button type="button" class="pill${sel?" active":""}" onclick="toggleAporte(${i},'${a.replace(/'/g,"\\'")}')">
+      ${a}
+    </button>`;
+  }).join("");
+
+  const selectOpts = (opts, val) => opts.map(o => `<option value="${o}"${val===o?" selected":""}>${o}</option>`).join("");
+
+  return `<div class="persona-card fade-up">
+    <div class="persona-header">
+      <div style="flex:1;">
+        <div class="persona-num">Persona ${i+1}</div>
+        <input class="input-name" placeholder="Nombre" value="${esc(p.nombre)}"
+          oninput="updatePersona(${i},'nombre',this.value)"/>
+      </div>
+      ${personas.length>1?`<button class="remove-btn" onclick="removePersona(${i})" title="Eliminar">✕</button>`:""}
+    </div>
+    <input class="input" placeholder="Rol actual" value="${esc(p.rol)}"
+      oninput="updatePersona(${i},'rol',this.value)"/>
+    <div class="grid-2">
+      <label><span class="label-text">¿Volverías a contratarla?</span>
+        <select class="select" onchange="updatePersona(${i},'recontratar',this.value)">
+          <option value="">Selecciona</option>${selectOpts(["Sí","No"],p.recontratar)}</select></label>
+      <label><span class="label-text">Si se va, ¿sentirías...?</span>
+        <select class="select" onchange="updatePersona(${i},'salida',this.value)">
+          <option value="">Selecciona</option>${selectOpts(["Tristeza","Tranquilidad"],p.salida)}</select></label>
+      <label><span class="label-text">¿Qué necesita más?</span>
+        <select class="select" onchange="updatePersona(${i},'control',this.value)">
+          <option value="">Selecciona</option>${selectOpts(["Guía y libertad","Control constante"],p.control)}</select></label>
+      <label><span class="label-text">¿Esta persona...?</span>
+        <select class="select" onchange="updatePersona(${i},'estandar',this.value)">
+          <option value="">Selecciona</option>${selectOpts(["Eleva el rendimiento","Sostiene el rendimiento","Baja el rendimiento"],p.estandar)}</select></label>
+    </div>
+    <textarea class="textarea" placeholder="¿Por qué? Cuéntanos un poco más"
+      oninput="updatePersona(${i},'porque',this.value)">${esc(p.porque)}</textarea>
+    <label><span class="label-text">¿Está en el rol donde puede rendir al máximo?</span>
+      <select class="select" onchange="updatePersona(${i},'rolCorrecto',this.value)">
+        <option value="">Selecciona</option>${selectOpts(["Sí","No","No estoy seguro"],p.rolCorrecto)}</select></label>
+    <div>
+      <p class="label-text" style="margin-bottom:.5rem;">Ubicación en el bus</p>
+      <div class="q-grid">${cuadBtns}</div>
+    </div>
+    <div>
+      <p style="font-size:.875rem;font-weight:600;margin-bottom:.5rem;">Aportes principales <span style="color:var(--muted);font-weight:400;">(máx. 2)</span></p>
+      <div style="display:flex;flex-wrap:wrap;gap:.45rem;">${aportePills}</div>
+    </div>
+  </div>`;
+}
+
+function renderMapa() {
+  const grid = document.getElementById("mapa-grid");
+  grid.innerHTML = CUADRANTES.map(c => {
+    const items = personas.filter(p => p.cuadrante === c.id);
+    const chips = items.length
+      ? items.map(p => `<span class="pill-tag">${p.nombre||"Sin nombre"}</span>`).join("")
+      : `<span style="font-size:.72rem;color:#a1a1aa;">Sin personas ubicadas</span>`;
+    return `<div class="quad-cell" style="border-color:${c.color};background:${c.bg};">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+        <div>
+          <div class="quad-id">Cuadrante ${c.id}</div>
+          <div class="quad-titulo">${c.titulo}</div>
+          <div class="quad-desc">${c.descripcion}</div>
+          <div class="quad-decision">Decisión: ${c.decision}</div>
+        </div>
+        <span class="quad-count">${items.length}</span>
+      </div>
+      <div class="quad-chips">${chips}</div>
+    </div>`;
+  }).join("");
+}
+
+
+
+function renderResultado() {
+  const instrumentos = personas.map(p => ({ persona:p, instrumento:getInstrumento(p) }));
+  const insights = buildInsights(personas);
+
+  // Instrumentos list
+  const list = document.getElementById("instrumentos-list");
+  list.innerHTML = instrumentos.map(({persona,instrumento},i) => `
+    <div class="instr-card">
+      <div class="instr-title">${instrumento.icono} ${persona.nombre||`Persona ${i+1}`} → ${instrumento.nombre}</div>
+      <div class="instr-sub">${instrumento.sentido}. Hoy suena: <strong style="color:var(--ink);">${instrumento.estado}</strong>.</div>
+    </div>`).join("");
+
+  // Retro
+  document.getElementById("retro-fun").innerHTML = insights.fun.length
+    ? insights.fun.map(t=>`<p class="retro-item">${t}</p>`).join("")
+    : `<p class="retro-item" style="color:#71717a;">Completa más información para generar análisis.</p>`;
+  document.getElementById("retro-adj").innerHTML = insights.adj.length
+    ? insights.adj.map(t=>`<p class="retro-item">${t}</p>`).join("")
+    : `<p class="retro-item" style="color:#71717a;">Sin fricciones detectadas por el momento.</p>`;
+}
+
+// ─── ACTIONS ─────────────────────────────────────────────────────────────────
+function addPersona() { personas.push(emptyPersona()); render(); }
+function removePersona(i) { if(personas.length>1) personas.splice(i,1); render(); }
+
+function updatePersona(i, key, val) {
+  personas[i][key] = val;
+  renderMapa();
+}
+
+function setCuadrante(i, val) {
+  personas[i].cuadrante = val;
+  renderPersonas();
+  renderMapa();
+}
+
+function toggleAporte(i, aporte) {
+  const curr = personas[i].aportes;
+  if (curr.includes(aporte)) {
+    personas[i].aportes = curr.filter(a=>a!==aporte);
+  } else if (curr.length < 2) {
+    personas[i].aportes = [...curr, aporte];
+  }
+  renderPersonas();
+}
+
+
+function generarLectura() {
+  renderResultado();
+  const sec = document.getElementById("resultado-section");
+  sec.style.display = "block";
+  sec.scrollIntoView({ behavior:"smooth", block:"start" });
+}
+
+// ─── AUDIO ────────────────────────────────────────────────────────────────────
+function getSystemTension(ps) {
+  const total = Math.max(ps.length,1);
+  const hasD = ps.some(p=>p.cuadrante==="D");
+  const ctrl = ps.filter(p=>p.control==="Control constante").length/total;
+  const malRol = ps.filter(p=>p.rolCorrecto==="No"||p.cuadrante==="B"||p.cuadrante==="D").length/total;
+  const dev = ps.filter(p=>p.cuadrante==="C").length/total;
+  const poco = ps.filter(p=>p.aportes.includes("Hoy aporta poco al sistema")||p.estandar==="Baja el rendimiento"||p.cuadrante==="D").length/total;
+  const base = Math.min(1, ctrl*0.25+malRol*0.25+dev*0.15+poco*0.35);
+  return hasD ? Math.max(0.82,base) : base;
+}
+
+function getBpm(g) {
+  if(g==="Rock")return 88; if(g==="Electrónica")return 108;
+  if(g==="Jazz")return 86; if(g==="Acústica")return 74; return 72;
+}
+function getPhase(t) { return t<6.5?"condiciones":t<13.25?"conexion":"impulso"; }
+function getPhaseEnergy(ph) { return ph==="condiciones"?0.75:ph==="conexion"?1:1.22; }
+
+function buildMelodyEvents(ps, g) {
+  const sg = g||"Sinfónica";
+  const team = ps.length?ps:[emptyPersona()];
+  const tension = getSystemTension(team);
+  const hasD = team.some(p=>p.cuadrante==="D");
+  const notes = tension>0.48?TENSE_FREQ:NOTE_FREQ;
+  const bpm = getBpm(sg);
+  const beat = 60/bpm;
+  const totalSteps = Math.floor(MELODY_SECONDS/(beat*0.5));
+  const events = [];
+  const profiles = {
+    "Rock":        {leadEvery:4,chordEvery:8, warmth:0.82},
+    "Electrónica": {leadEvery:2,chordEvery:16,warmth:0.86},
+    "Jazz":        {leadEvery:4,chordEvery:8, warmth:0.92},
+    "Acústica":    {leadEvery:5,chordEvery:8, warmth:0.88},
+    "Sinfónica":   {leadEvery:4,chordEvery:4, warmth:1   }
+  };
+  const prof = profiles[sg]||profiles["Sinfónica"];
+  const add = ev => { if(isFinite(ev.at)&&ev.at>=0&&ev.at<MELODY_SECONDS) events.push(ev); };
+
+  for(let step=0;step<totalSteps;step++){
+    const time=step*beat*0.5;
+    const bar=Math.floor(step/8)%CHORD_PROG.length;
+    const phase=getPhase(time);
+    const pe=getPhaseEnergy(phase)*prof.warmth;
+    const isStrong=step%4===0,isHalf=step%4===2,isOff=step%2===1;
+
+    if(step%prof.chordEvery===0)
+      add({at:time,voice:"strings",freq:hasD?[130.81,138.59,184.99,233.08]:CHORD_PROG[bar],dur:sg==="Sinfónica"?beat*4:beat*2.4,vel:0.22*pe,type:"sine"});
+    if(step%(phase==="impulso"?3:4)===0)
+      add({at:time+0.03,voice:"lead",freq:notes[step%notes.length],dur:phase==="condiciones"?beat*0.9:beat*0.68,vel:(phase==="condiciones"?0.1:0.14)*pe,type:sg==="Electrónica"?"square":"triangle"});
+
+    if(sg==="Rock"){
+      if(isStrong)add({at:time+0.004,voice:"kick",dur:0.11,vel:0.52*pe});
+      if(isHalf&&phase!=="condiciones")add({at:time+0.006,voice:"hat",dur:0.04,vel:0.18*pe});
+      if(step%4===0)add({at:time+0.012,voice:"bass",freq:[BASS_PROG[bar],BASS_PROG[bar]*1.5],dur:beat*0.82,vel:0.34*pe,type:"triangle"});
+    } else if(sg==="Electrónica"){
+      if(step%2===0)add({at:time+0.004,voice:"kick",dur:0.08,vel:0.5*pe});
+      if(isOff)add({at:time+0.006,voice:"hat",dur:0.035,vel:0.24*pe});
+      add({at:time+0.012,voice:"lead",freq:notes[step%notes.length],dur:0.12,vel:0.15*pe,type:"square"});
+    } else if(sg==="Jazz"){
+      const swingT=time+(isOff?beat*0.24:0.025);
+      if(step%2===0)add({at:swingT,voice:"hat",dur:0.08,vel:0.18*pe});
+      add({at:swingT+0.015,voice:"bass",freq:BASS_PROG[(bar+step)%BASS_PROG.length],dur:beat*0.58,vel:0.23*pe,type:"triangle"});
+    } else if(sg==="Acústica"){
+      if(step%4===0)add({at:time+0.004,voice:"bass",freq:BASS_PROG[bar],dur:beat*0.72,vel:0.17*pe,type:"triangle"});
+      if(step%4===1||step%4===3)add({at:time+0.02,voice:"lead",freq:CHORD_PROG[bar][2],dur:0.18,vel:0.15*pe,type:"triangle"});
+    } else {
+      if(isStrong)add({at:time+0.004,voice:"bass",freq:BASS_PROG[bar],dur:beat,vel:0.19*pe,type:"sine"});
+      if(step%2===0)add({at:time+0.02,voice:"strings",freq:[notes[step%notes.length],notes[step%notes.length]*1.5],dur:beat*1.7,vel:0.15*pe,type:"sine"});
+    }
+
+    team.forEach((p,idx)=>{
+      const aporte=p.aportes[0]||"Conecta al equipo";
+      const isLow=aporte==="Hoy aporta poco al sistema"||p.estandar==="Baja el rendimiento"||p.cuadrante==="D";
+      const wrongRole=p.rolCorrecto==="No"||p.cuadrante==="B";
+      const needsDev=p.cuadrante==="C";
+      const modulo=isLow?2:Math.max(2,prof.leadEvery-1);
+      if((step+idx)%modulo!==0)return;
+      const instr=INSTR[aporte];
+      const iFreq=instr?instr.baseFreq:notes[(step+idx)%notes.length];
+      const baseNote=phase==="condiciones"?iFreq:phase==="conexion"?notes[(step+idx)%notes.length]*0.55+iFreq*0.45:notes[(step+idx)%notes.length]*0.45+iFreq*0.55;
+      const delay=isLow?(hasD?0.09+(idx%3)*0.035:0)+0.07+idx*0.018:wrongRole?0.05:needsDev?0.032:idx*0.014+(sg==="Jazz"&&step%2?beat*0.24:sg==="Acústica"?0.03:0);
+      const evTime=time+delay;
+      const vel=(isLow?0.22:aporte==="Aporta energía"?0.46:0.38)*pe;
+      if(isLow){
+        add({at:evTime,voice:"noise",dur:0.12,vel:hasD?0.25:0.12});
+        add({at:evTime+0.012,voice:"lead",freq:hasD?[277.18,369.99]:277.18,dur:0.12,vel:hasD?0.22:0.12,type:"sawtooth"});
+        if(hasD)add({at:evTime+0.02,voice:"bass",freq:46.25,dur:0.1,vel:0.34,type:"sawtooth"});
+        return;
+      }
+      if(aporte==="Sostiene el ritmo"||aporte==="Ordena el trabajo"){
+        add({at:evTime,voice:"kick",dur:0.1,vel:0.48*pe});
+        add({at:evTime+0.01,voice:"bass",freq:iFreq,dur:beat*0.72,vel:0.42*pe,type:"triangle"});
+      } else if(aporte==="Conecta al equipo"){
+        add({at:evTime,voice:"bass",freq:iFreq,dur:beat*0.78,vel:0.46*pe,type:"triangle"});
+        add({at:evTime+0.014,voice:"lead",freq:baseNote,dur:beat*0.6,vel:vel*0.95,type:"sine"});
+      } else if(aporte==="Impulsa ideas"){
+        add({at:evTime,voice:"lead",freq:iFreq*(sg==="Jazz"?1.125:sg==="Rock"?1.25:1),dur:beat*0.65,vel:vel*1.05,type:sg==="Rock"?"triangle":"sine"});
+      } else if(aporte==="Ejecuta con calidad"||aporte==="Cuida el detalle"){
+        add({at:evTime,voice:"lead",freq:[iFreq,iFreq*1.5],dur:sg==="Sinfónica"?beat*1.1:beat*0.7,vel:vel*1.08,type:"sine"});
+      } else if(aporte==="Aporta energía"){
+        add({at:evTime,voice:"lead",freq:iFreq*(sg==="Rock"?1.35:1.6),dur:0.22,vel:vel*1.18,type:"triangle"});
+        if(sg==="Rock")add({at:evTime+0.02,voice:"kick",dur:0.08,vel:0.28*pe});
+      } else if(aporte==="Resuelve problemas"||aporte==="Aprende y mejora"){
+        add({at:evTime,voice:"lead",freq:[iFreq,iFreq*1.25,iFreq*1.5],dur:beat*0.72,vel:vel*1.02,type:"sine"});
+      } else {
+        add({at:evTime,voice:"lead",freq:iFreq,dur:beat*0.62,vel,type:"sine"});
+      }
+    });
+  }
+  return events.sort((a,b)=>a.at-b.at);
+}
+
+function playOsc(ctx,dest,ev,start0){
+  const start=start0+ev.at;
+  const freqs=Array.isArray(ev.freq)?ev.freq:[ev.freq||220];
+  const type=ev.type||"sine";
+  freqs.forEach((freq,i)=>{
+    const osc=ctx.createOscillator(),gain=ctx.createGain(),filt=ctx.createBiquadFilter();
+    const off=i*0.004+Math.random()*0.006;
+    const attack=ev.voice==="strings"?0.12:ev.voice==="bass"?0.035:0.045;
+    const tail=ev.voice==="strings"?0.28:0.12;
+    filt.type="lowpass"; filt.frequency.setValueAtTime(ev.voice==="bass"?900:ev.voice==="lead"?1600:2200,start+off);
+    osc.type=type; osc.frequency.setValueAtTime(freq,start+off);
+    osc.detune.setValueAtTime((Math.random()-0.5)*7,start+off);
+    gain.gain.setValueAtTime(0.0001,start+off);
+    gain.gain.linearRampToValueAtTime(Math.min(0.62,ev.vel*1.05),start+off+attack);
+    gain.gain.exponentialRampToValueAtTime(0.0001,start+off+Math.max(0.22,ev.dur)+tail);
+    osc.connect(filt);filt.connect(gain);gain.connect(dest);
+    osc.start(start+off);osc.stop(start+off+ev.dur+tail+0.08);
+  });
+}
+
+function playNoise(ctx,dest,ev,start0){
+  const start=start0+ev.at,dur=Math.max(0.04,ev.dur);
+  const buf=ctx.createBuffer(1,Math.max(1,Math.floor(ctx.sampleRate*dur)),ctx.sampleRate);
+  const data=buf.getChannelData(0);
+  for(let i=0;i<data.length;i++)data[i]=(Math.random()*2-1)*0.7;
+  const src=ctx.createBufferSource(),gain=ctx.createGain();
+  src.buffer=buf;
+  gain.gain.setValueAtTime(0.0001,start);gain.gain.linearRampToValueAtTime(ev.vel,start+0.01);gain.gain.exponentialRampToValueAtTime(0.0001,start+dur);
+  src.connect(gain);gain.connect(dest);src.start(start);src.stop(start+dur);
+}
+
+function createReverb(ctx){
+  const conv=ctx.createConvolver();
+  const imp=ctx.createBuffer(2,ctx.sampleRate*2,ctx.sampleRate);
+  for(let c=0;c<2;c++){const ch=imp.getChannelData(c);for(let i=0;i<ch.length;i++)ch[i]=(Math.random()*2-1)*Math.pow(1-i/ch.length,2);}
+  conv.buffer=imp;return conv;
+}
+
+function scheduleAll(ctx,dest,events,start0){
+  events.forEach(ev=>{
+    if(ev.voice==="noise")playNoise(ctx,dest,ev,start0);
+    else if(ev.voice==="kick")playOsc(ctx,dest,{...ev,freq:ev.freq||55,type:"sine"},start0);
+    else if(ev.voice==="hat")playNoise(ctx,dest,{...ev,dur:Math.min(ev.dur,0.06),vel:ev.vel*0.45},start0);
+    else playOsc(ctx,dest,ev,start0);
+  });
+}
+
+async function stopMelody(){
+  if(audioTimeout)clearTimeout(audioTimeout);
+  audioTimeout=null;
+  if(progressInterval)clearInterval(progressInterval);
+  progressInterval=null;
+  document.getElementById("progress-bar").style.width="0%";
+  if(audioCtx){try{await audioCtx.close();}catch(e){}audioCtx=null;}
+}
+
+async function playMelody(){
+  await stopMelody();
+  const AC=window.AudioContext||window.webkitAudioContext;
+  if(!AC)return;
+  audioCtx=new AC();
+  const master=audioCtx.createGain();master.gain.value=0.6;
+  const rev=createReverb(audioCtx);
+  master.connect(rev);rev.connect(audioCtx.destination);master.connect(audioCtx.destination);
+  scheduleAll(audioCtx,master,buildMelodyEvents(personas,genero||"Sinfónica"),audioCtx.currentTime+0.08);
+  audioTimeout=setTimeout(stopMelody,(MELODY_SECONDS+1)*1000);
+  // Progress bar
+  const startT=Date.now();
+  const bar=document.getElementById("progress-bar");
+  progressInterval=setInterval(()=>{
+    const pct=Math.min(100,(Date.now()-startT)/(MELODY_SECONDS*10));
+    bar.style.width=pct+"%";
+    if(pct>=100)clearInterval(progressInterval);
+  },200);
+}
+
+async function prepararWav(){
+  const btn=document.getElementById("wav-btn");
+  btn.disabled=true;btn.textContent="Generando...";
+  const OAC=window.OfflineAudioContext||window.webkitOfflineAudioContext;
+  if(!OAC){alert("Tu navegador no soporta renderizado de audio offline.");btn.disabled=false;btn.textContent="Preparar melodía";return;}
+  try{
+    const ctx=new OAC(2,Math.ceil(44100*MELODY_SECONDS),44100);
+    const master=ctx.createGain();master.gain.value=0.62;
+    const rev=createReverb(ctx);
+    master.connect(ctx.destination);master.connect(rev);rev.connect(ctx.destination);
+    scheduleAll(ctx,master,buildMelodyEvents(personas,genero||"Sinfónica"),0.01);
+    const buf=await ctx.startRendering();
+    const nc=buf.numberOfChannels,sr=buf.sampleRate,len=buf.length*nc*2+44;
+    const ab=new ArrayBuffer(len),dv=new DataView(ab);
+    let o=0;
+    const ws=s=>{for(let i=0;i<s.length;i++)dv.setUint8(o++,s.charCodeAt(i));};
+    ws("RIFF");dv.setUint32(o,len-8,true);o+=4;ws("WAVE");ws("fmt ");
+    dv.setUint32(o,16,true);o+=4;dv.setUint16(o,1,true);o+=2;
+    dv.setUint16(o,nc,true);o+=2;dv.setUint32(o,sr,true);o+=4;
+    dv.setUint32(o,sr*nc*2,true);o+=4;dv.setUint16(o,nc*2,true);o+=2;
+    dv.setUint16(o,16,true);o+=2;ws("data");dv.setUint32(o,len-o-4,true);o+=4;
+    for(let i=0;i<buf.length;i++)for(let c=0;c<nc;c++){
+      const s=Math.max(-1,Math.min(1,buf.getChannelData(c)[i]));
+      dv.setInt16(o,s<0?s*0x8000:s*0x7fff,true);o+=2;
+    }
+    const blob=new Blob([ab],{type:"audio/wav"});
+    if(audioUrl)URL.revokeObjectURL(audioUrl);
+    audioUrl=URL.createObjectURL(blob);
+    const link=document.getElementById("wav-link");
+    link.href=audioUrl;
+    document.getElementById("wav-banner").style.display="block";
+  }catch(e){console.error(e);alert("No se pudo generar el WAV.");}
+  btn.disabled=false;btn.innerHTML=`<svg class="icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Preparar melodía`;
+}
+
+// ─── INSTRUMENTO / INSIGHTS ──────────────────────────────────────────────────
+function getInstrumento(p){
+  const aporte=p.aportes[0]||"Conecta al equipo";
+  const base=INSTR[aporte]||INSTR["Conecta al equipo"];
+  let estado="en equilibrio";
+  if(p.estandar==="Sostiene el rendimiento")estado="en su zona estable";
+  if(p.estandar==="Baja el rendimiento")estado="desafinado";
+  if(p.rolCorrecto==="No"||p.cuadrante==="B")estado="en el instrumento incorrecto";
+  if(p.control==="Control constante")estado="requiere dirección constante";
+  if(p.cuadrante==="D")estado="genera ruido en el sistema";
+  if(p.cuadrante==="C")estado="necesita ensayo y desarrollo";
+  return {...base,estado};
+}
+
+function buildInsights(ps){
+  const total  = ps.length || 1;
+  const qA     = ps.filter(p=>p.cuadrante==="A").length;
+  const qB     = ps.filter(p=>p.cuadrante==="B").length;
+  const qC     = ps.filter(p=>p.cuadrante==="C").length;
+  const qD     = ps.filter(p=>p.cuadrante==="D").length;
+  const eleva    = ps.filter(p=>p.estandar==="Eleva el rendimiento").length;
+  const baja     = ps.filter(p=>p.estandar==="Baja el rendimiento").length;
+  const ctrl   = ps.filter(p=>p.control==="Control constante").length;
+  const libre  = ps.filter(p=>p.control==="Guía y libertad").length;
+  const alivio = ps.filter(p=>p.salida==="Tranquilidad").length;
+  const decep  = ps.filter(p=>p.salida==="Tristeza").length;
+  const malRol = ps.filter(p=>p.rolCorrecto==="No"||p.cuadrante==="B").length;
+  const noSeg  = ps.filter(p=>p.rolCorrecto==="No estoy seguro").length;
+  const noRec  = ps.filter(p=>p.recontratar==="No").length;
+  const siRec  = ps.filter(p=>p.recontratar==="Sí").length;
+  const pCtrl  = ctrl/total;
+  const pA     = qA/total;
+  const fun=[], adj=[];
+
+  // ── LO QUE ESTÁ FUNCIONANDO ─────────────────────────────────────────────────
+
+  if(pA>=0.6){
+    fun.push("Tienes a la mayoría de las personas en el lugar donde pueden dar lo mejor. Eso no es un detalle menor: Good to Great encontró que las empresas extraordinarias no empezaban por la estrategia, sino por tener a las personas correctas en los asientos correctos. Lo que ya construiste aquí es la base más sólida que existe.");
+  } else if(pA>=0.4){
+    fun.push("Ya tienes personas bien ubicadas. Esa base importa más de lo que parece: cuando las personas correctas están en el lugar correcto, el equipo empieza a moverse con menos empuje tuyo y más impulso propio.");
+  }
+
+  if(libre/total>0.55){
+    fun.push("Buena parte del equipo funciona con guía y libertad, sin necesitar supervisión constante. Las personas que no necesitan control para rendir son exactamente las que Collins describe como las correctas para el autobús: se mueven por impulso propio, no por presión externa.");
+  }
+
+  if(eleva/total>=0.55){
+    fun.push("Más de la mitad del equipo está elevando el estándar. Eso tiene un efecto silencioso pero acumulativo: cuando el listón es alto y se sostiene, quienes llegan después tienden a ajustarse a él. Estás construyendo cultura sin necesidad de declararlo.");
+  }
+
+  if(siRec/total>=0.7){
+    fun.push("Volverías a contratar a la gran mayoría. Esa pregunta —simple pero honesta— es uno de los mejores termómetros de talento que existen. Cuando la respuesta es sí para casi todos, significa que no solo elegiste bien: elegiste personas con los valores y la actitud que hacen posible algo extraordinario.");
+  }
+
+  if(decep>0 && alivio===0){
+    fun.push("Perder a cualquiera de ellos te generaría un impacto real. Eso dice que cada persona en el equipo aporta algo que el sistema notaría si falta. No es un dato menor en un equipo que aspira a ser extraordinario.");
+  }
+
+  if(qB>0 && qD===0){
+    fun.push("Hay personas con potencial que hoy están en un rol que no les hace justicia. La buena noticia es que el problema no es la persona. A veces lo único que hace falta es moverlas de asiento.");
+  }
+
+  if(qC>0 && qD===0 && baja===0){
+    fun.push("Las personas en desarrollo están creciendo sin afectar el estándar del equipo. El reto ahora es ser específico con ellas: qué se espera, en cuánto tiempo y cómo se va a evaluar. El desarrollo sin un norte claro se convierte fácilmente en espera indefinida.");
+  }
+
+  if(fun.length===0){
+    fun.push("Todavía hay mucho por definir sobre cómo está ubicado el equipo. Eso no es un problema: es un punto de partida honesto. La claridad sobre dónde estás hoy es lo primero que necesitas para decidir hacia dónde moverte.");
+  }
+
+  // ── LO QUE PODRÍA AJUSTARSE ─────────────────────────────────────────────────
+
+  if(qD>0){
+    const nd = ps.filter(p=>p.cuadrante==="D").map(p=>p.nombre||"alguien").join(", ");
+    adj.push(`Con ${nd} hay una tensión que el equipo probablemente ya siente, aunque nadie lo diga en voz alta. Collins es claro en esto: mantener a alguien en un lugar que no le corresponde no es generosidad, es un costo que pagan todos. La conversación directa y respetuosa casi siempre es mejor para esa persona que el silencio prolongado.`);
+  }
+
+  if(alivio>0){
+    const n = alivio===1 ? "una persona" : `${alivio} personas`;
+    adj.push(`Ante ${n}, lo primero que aparece es tranquilidad ante la idea de que se vayan. Esa reacción merece atención, no como juicio, sino como información. Generalmente aparece cuando ya hay algo claro que todavía no se ha nombrado.`);
+  }
+
+  if(noRec>0){
+    adj.push(`Hay ${noRec===1?"alguien":"personas"} sobre quien hoy tienes dudas reales de que sea la persona indicada. Eso generalmente no aparece de la nada: hay algo concreto que lo sostiene. Vale nombrarlo, al menos para uno mismo, antes de decidir qué hacer con esa claridad.`);
+  }
+
+  if(pCtrl>0.4){
+    adj.push("Varias personas necesitan supervisión constante para avanzar. Eso pone mucho peso sobre ti como líder y limita lo que el equipo puede construir solo. Antes de asumir que es un problema de las personas, vale revisar si están en el rol correcto: la necesidad de control a veces no es sobre la persona, es sobre el encaje.");
+  } else if(pCtrl>0.2){
+    adj.push("Algunas personas funcionan mejor con seguimiento frecuente. Puede ser una etapa del desarrollo o puede ser una señal de que el rol no es el correcto para ellas. Diferenciar eso es útil antes de invertir más tiempo en acompañamiento.");
+  }
+
+  if(malRol>0){
+    adj.push(`${malRol===1?"Hay alguien que":"Hay personas que"} no está${malRol===1?"":"n"} rindiendo al máximo en el rol actual. Antes de concluir que no encajan, vale explorar si simplemente están en el asiento equivocado del autobús. El movimiento correcto puede transformar a alguien que hoy no funciona en alguien clave.`);
+  }
+
+  if(noSeg>0 && malRol===0){
+    adj.push(`Hay dudas sobre si ${noSeg===1?"alguien está":"algunas personas están"} bien ubicado. Esa incertidumbre es una señal útil. Generalmente aparece cuando algo no termina de funcionar pero todavía no es evidente. Vale la pena prestarle atención antes de que la duda se vuelva certeza tardía.`);
+  }
+
+  if(baja>0){
+    adj.push(`${baja===1?"Hay alguien":"Hay personas"} cuyo desempeño está bajando el estándar del equipo. Collins lo dice con claridad: la única forma de cumplirle a las personas que sí rinden es no sobrecargarlas con quienes no lo hacen. Actuar sobre esto también es una forma de cuidar al equipo.`);
+  }
+
+  if(qA>0 && qD>0){
+    adj.push("Tienes personas muy sólidas conviviendo con tensiones importantes. Las personas que más rinden suelen ser las primeras en cansarse de sostener lo que otros no están aportando. Resolver las tensiones es también una forma de cuidar a quienes hacen posible los mejores resultados del equipo.");
+  }
+
+  if(eleva>0 && ctrl>0){
+    adj.push("Hay personas elevando el estándar y otras que necesitan supervisión constante. Esa combinación puede crear una dinámica desequilibrada con el tiempo. Vale revisar si quienes necesitan más seguimiento están en el lugar correcto, o si hay algo del sistema que los está frenando.");
+  }
+
+  if(qC>0 && (baja>0||pCtrl>0.2)){
+    adj.push(`${qC===1?"Hay alguien":"Hay personas"} en desarrollo que necesitan acompañamiento mientras otras situaciones del equipo también piden atención. En ese contexto, la clave es ser muy específico: qué se espera, en cuánto tiempo y cuándo se va a evaluar si está funcionando.`);
+  } else if(qC>0){
+    adj.push(`${qC===1?"Alguien está":"Personas están"} creciendo y eso es positivo. Para que ese desarrollo rinda frutos reales, necesitan claridad sobre a dónde van y cuándo van a saber si llegaron. Sin eso, el acompañamiento puede volverse indefinido sin resultados concretos.`);
+  }
+
+  return{fun,adj};
+}
+
+// ─── REPORTE ──────────────────────────────────────────────────────────────────
+function abrirReporte(){
+  const fecha=new Date().toLocaleDateString("es-CO",{year:"numeric",month:"long",day:"numeric"});
+  const instrumentos=personas.map(p=>({persona:p,instrumento:getInstrumento(p)}));
+  const insights=buildInsights(personas);
+
+  const cuadHTML=CUADRANTES.map(c=>{
+    const items=personas.filter(p=>p.cuadrante===c.id);
+    const chips=items.length?items.map(p=>`<span style="display:inline-block;border-radius:9999px;background:rgba(255,255,255,.85);border:1px solid rgba(0,0,0,.08);padding:3px 12px;font-size:11px;margin:3px 3px 0 0;">${p.nombre||"Sin nombre"}</span>`).join(""):`<span style="font-size:11px;color:#a1a1aa;">Sin personas ubicadas</span>`;
+    return `<div style="border-radius:14px;border:1.5px solid ${c.color};padding:14px 16px;background:${c.bg};break-inside:avoid;">
+      <div style="display:flex;justify-content:space-between;gap:8px;">
+        <div><div style="font-weight:800;font-size:13px;">Cuadrante ${c.id}</div><div style="font-weight:600;font-size:11px;margin-top:2px;">${c.titulo}</div><div style="font-size:10.5px;color:#52525b;margin-top:5px;line-height:1.5;">${c.descripcion}</div><div style="font-size:10.5px;color:#3f3f46;margin-top:4px;font-weight:500;">Decisión: ${c.decision}</div></div>
+        <span style="border-radius:9999px;background:rgba(255,255,255,.9);padding:2px 10px;font-size:12px;font-weight:700;white-space:nowrap;flex-shrink:0;">${items.length}</span>
+      </div>
+      <div style="margin-top:8px;">${chips}</div>
+    </div>`;
+  }).join("");
+
+  const persHTML=instrumentos.map(({persona,instrumento},i)=>{
+    const q=CUADRANTES.find(c=>c.id===persona.cuadrante);
+    const chips=persona.aportes.length?persona.aportes.map(a=>`<span style="border-radius:9999px;background:#18181b;color:#fff;padding:3px 11px;font-size:10px;margin:2px 4px 2px 0;display:inline-block;">${a}</span>`).join(""):`<span style="color:#a1a1aa;font-size:10px;">Sin aportes</span>`;
+    const rows=[["¿Volvería a contratarla?",persona.recontratar||"—"],["Si se va, sentiría...",persona.salida||"—"],["Necesita más",persona.control||"—"],["¿Esta persona...?",persona.estandar||"—"],["Rol correcto",persona.rolCorrecto||"—"]].map(([l,v])=>`<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #f4f4f5;font-size:11px;"><span style="color:#71717a;">${l}</span><span style="font-weight:600;">${v}</span></div>`).join("");
+    const qtag=q?`<span style="border-radius:9999px;background:${q.bg};border:1.5px solid ${q.color};padding:3px 12px;font-size:11px;font-weight:700;">Cuadrante ${q.id}</span>`:`<span style="border-radius:9999px;background:#f4f4f5;padding:3px 12px;font-size:11px;color:#a1a1aa;">Sin ubicar</span>`;
+    const pq=persona.porque?`<div style="margin-top:8px;background:#fafaf9;border-radius:10px;padding:10px 12px;border:1px solid #f4f4f5;"><div style="font-size:9px;color:#71717a;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;">Lectura del líder</div><div style="font-size:11px;line-height:1.6;">${persona.porque}</div></div>`:"";
+    return `<div style="background:#fff;border-radius:16px;border:1px solid #e4e4e7;padding:16px 18px;break-inside:avoid;margin-bottom:10px;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
+        <div><div style="font-size:8px;text-transform:uppercase;letter-spacing:.12em;color:#a1a1aa;margin-bottom:2px;">Persona ${i+1}</div><div style="font-size:16px;font-weight:800;">${persona.nombre||"Sin nombre"}</div><div style="font-size:12px;color:#71717a;margin-top:2px;">${persona.rol||"Sin rol"}</div></div>
+        <div style="text-align:right;">${qtag}<div style="margin-top:6px;font-size:17px;">${instrumento.icono}</div><div style="font-size:11px;font-weight:600;">${instrumento.nombre}</div><div style="font-size:10px;color:#71717a;max-width:110px;text-align:right;line-height:1.4;">${instrumento.estado}</div></div>
+      </div>
+      <div>${rows}</div>
+      <div style="margin-top:8px;"><div style="font-size:9px;color:#71717a;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px;">Aportes</div>${chips}</div>
+      ${pq}
+    </div>`;
+  }).join("");
+
+  const liF=insights.fun.length?insights.fun.map(t=>`<li style="padding-left:14px;position:relative;margin-bottom:7px;line-height:1.6;font-size:12px;color:#d4d4d8;">${t}</li>`).join(""):`<li style="color:#71717a;font-size:12px;">Completa más datos para generar análisis.</li>`;
+  const liA=insights.adj.length?insights.adj.map(t=>`<li style="padding-left:14px;position:relative;margin-bottom:7px;line-height:1.6;font-size:12px;color:#d4d4d8;">${t}</li>`).join(""):`<li style="color:#71717a;font-size:12px;">Sin fricciones detectadas.</li>`;
+
+  const html=`<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"/><title>Reporte equipo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=DM+Serif+Display&display=swap" rel="stylesheet"/>
+<style>*{box-sizing:border-box;margin:0;padding:0;}body{font-family:'DM Sans',system-ui,sans-serif;background:#f7f4ee;color:#18181b;-webkit-print-color-adjust:exact;print-color-adjust:exact;}.wrap{max-width:860px;margin:0 auto;padding:40px 36px;}ul{list-style:none;padding:0;}ul li::before{content:"•";margin-right:6px;}@media print{.noprint{display:none!important;}.wrap{padding:22px 26px;}}</style></head>
+<body><div class="wrap">
+<div class="noprint" style="margin-bottom:24px;display:flex;gap:12px;align-items:center;background:#fff;border-radius:16px;border:1px solid #e4e4e7;padding:14px 18px;">
+  <button onclick="window.print()" style="border-radius:9999px;background:#18181b;color:#fff;border:none;padding:9px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">Guardar como PDF</button>
+  <span style="font-size:13px;color:#71717a;">Ctrl+P → "Guardar como PDF"</span>
+</div>
+<div style="margin-bottom:24px;">
+  <div style="display:inline-flex;align-items:center;gap:6px;border-radius:9999px;background:#18181b;color:#fff;padding:5px 14px;font-size:11px;font-weight:600;margin-bottom:12px;">🎵 Arquitectura del equipo</div>
+  <h1 style="font-family:'DM Serif Display',Georgia,serif;font-size:28px;font-weight:400;letter-spacing:-.01em;line-height:1.1;margin-bottom:8px;">¿Cómo está sonando hoy tu equipo?</h1>
+  <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:8px;"><span style="font-size:13px;color:#71717a;">${fecha}</span></div>
+  <p style="font-size:12px;color:#71717a;line-height:1.6;max-width:580px;">Este reporte no evalúa personas: ayuda a leer patrones de arquitectura, rol, estándar y decisiones del sistema.</p>
+</div>
+<div style="height:1px;background:#e4e4e7;margin-bottom:22px;"></div>
+<div style="margin-bottom:24px;"><h2 style="font-size:14px;font-weight:700;margin-bottom:12px;">Mapa del bus</h2><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">${cuadHTML}</div></div>
+<div style="height:1px;background:#e4e4e7;margin-bottom:22px;"></div>
+<div style="margin-bottom:24px;"><h2 style="font-size:14px;font-weight:700;margin-bottom:12px;">Personas e instrumentos</h2><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">${persHTML}</div></div>
+<div style="height:1px;background:#e4e4e7;margin-bottom:22px;"></div>
+<div style="background:#18181b;border-radius:20px;padding:26px;margin-bottom:22px;break-inside:avoid;">
+  <h2 style="font-size:14px;font-weight:700;color:#fff;margin-bottom:14px;">Retroalimentación</h2>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px;">
+    <div><div style="font-size:10px;font-weight:700;color:#6ee7b7;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px;">Lo que está funcionando</div><ul>${liF}</ul></div>
+    <div><div style="font-size:10px;font-weight:700;color:#fcd34d;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px;">Lo que podría ajustarse</div><ul>${liA}</ul></div>
+  </div>
+</div>
+<div style="text-align:center;padding-top:14px;border-top:1px solid #e4e4e7;"><p style="font-size:11px;color:#a1a1aa;">¿Cómo está sonando hoy tu equipo? · ${fecha}</p></div>
+</div></body></html>`;
+
+  // Use Blob URL — no popup blocker issues
+  try {
+    const blob = new Blob([html], {type: 'text/html;charset=utf-8'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.target = '_blank';
+    a.rel = 'noopener';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 10000);
+  } catch(e) {
+    // Fallback: write to iframe and print
+    const iframe = document.createElement('iframe');
+    iframe.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:1px;height:1px;';
+    document.body.appendChild(iframe);
+    iframe.contentDocument.write(html);
+    iframe.contentDocument.close();
+    setTimeout(() => {
+      iframe.contentWindow.print();
+      setTimeout(() => document.body.removeChild(iframe), 2000);
+    }, 500);
+  }
+}
+
+// ─── UTILS ────────────────────────────────────────────────────────────────────
+function esc(str){
+  return(str||"").replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+personas = [emptyPersona()];
+// render() called by goToTool2()
+async function t2PrepararWavDescarga(){
+  var btn = event.currentTarget;
+  var origText = btn.innerHTML;
+  btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg> Generando...';
+  btn.disabled = true;
+  await prepararWav();
+  // copy link to bottom button
+  var topLink = document.getElementById('wav-link');
+  var botLink = document.getElementById('t2-wav-link-bottom');
+  if(topLink && botLink && topLink.href) {
+    botLink.href = topLink.href;
+    botLink.style.display = 'inline';
+  }
+  btn.innerHTML = origText;
+  btn.disabled = false;
+}
+
+
+
+
+// ── NAVIGATION ─────────────────────────────────────────────────────────────
+function goToTransition() {
+  document.getElementById('results').style.display = 'none';
+  var ts = document.getElementById('screen-transition');
+  ts.style.display = 'flex';
+  window.scrollTo(0,0);
+  // Particles
+  var bg = document.getElementById('trans-particles');
+  if (!bg) return;
+  bg.innerHTML = '';
+  for (var i = 0; i < 20; i++) {
+    var p = document.createElement('div');
+    p.className = 'trans-particle';
+    var sz   = Math.random() * 2 + 1;
+    var x    = Math.random() * 100;
+    var drift = (Math.random() - 0.5) * 80;
+    var dur  = Math.random() * 8 + 7;
+    var del  = Math.random() * 5;
+    p.style.cssText =
+      'width:' + sz + 'px;height:' + sz + 'px;left:' + x + '%;' +
+      'background:rgba(168,190,135,' + (Math.random() * 0.25 + 0.06) + ');' +
+      '--drift:' + drift + 'px;animation-duration:' + dur + 's;animation-delay:' + del + 's;';
+    bg.appendChild(p);
+  }
+}
+function goToTool2() {
+  document.getElementById('screen-transition').style.display = 'none';
+  document.getElementById('screen-tool2').style.display = 'block';
+  window.scrollTo(0,0);
+  render(); // initialise tool2 DOM now that it's visible
+}
+
+
+
+async function t2PrepararWavDescarga() {
+  var btn = event.currentTarget;
+  var orig = btn.innerHTML;
+  btn.innerHTML = '← Generando...';
+  btn.disabled = true;
+  await prepararWav();
+  var topLink = document.getElementById('wav-link');
+  var botLink = document.getElementById('t2-wav-link-bottom');
+  if (topLink && botLink && topLink.href) {
+    botLink.href = topLink.href;
+    botLink.style.display = 'inline-flex';
+  }
+  btn.innerHTML = orig;
+  btn.disabled = false;
+}
+
+
+
+// ── HOME NAVIGATION ──────────────────────────────────────────────────────────
+function goToDiagnostico() {
+  document.getElementById('screen-home').style.display = 'none';
+  document.getElementById('cover').style.display = 'flex';
+  window.scrollTo(0, 0);
+}
+function goToEquipo() {
+  document.getElementById('screen-home').style.display = 'none';
+  document.getElementById('screen-tool2-intro').style.display = 'flex';
+  window.scrollTo(0, 0);
+}
+
+function backToHome() {
+  document.getElementById('cover').style.display = 'none';
+  document.getElementById('screen-home').style.display = 'flex';
+  window.scrollTo(0, 0);
+}
+
+function backFromTool2() {
+  document.getElementById('screen-tool2').style.display = 'none';
+  document.getElementById('screen-tool2-intro').style.display = 'flex';
+  window.scrollTo(0, 0);
+}
+
+
+function enterTool2() {
+  document.getElementById('screen-tool2-intro').style.display = 'none';
+  document.getElementById('screen-tool2').style.display = 'block';
+  window.scrollTo(0, 0);
+  render();
+}
+function backFromTool2Intro() {
+  document.getElementById('screen-tool2-intro').style.display = 'none';
+  document.getElementById('screen-home').style.display = 'flex';
+  window.scrollTo(0, 0);
+}
+
+
+function backFromQuiz() {
+  document.getElementById('quiz').style.display = 'none';
+  document.getElementById('cover').style.display = 'flex';
+  window.scrollTo(0, 0);
+}
+
+</script>
+</body>
+</html>
